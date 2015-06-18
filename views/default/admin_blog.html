@@ -1,0 +1,31 @@
+{{extend 'admin_layout.html'}}
+{{if categories is not None:}}
+<table>
+<tr><td>分类名</td><td>文章数量</td></tr>
+{{for category in categories:}}
+<tr>
+<td>{{=A(category.name, _href=URL('admin_blog', args=[str(category.id)]) )}}</td><td>{{=(category.ray_blog.count())}}</td>
+</tr>
+{{pass}}
+</table>
+{{pass}}
+
+<br/>
+<p>
+<b>所属分类{{=selected_category.name}}</b>
+{{if blogs is not None:}}
+<table>
+<tr><td>文章标题</td><td>评论</td><td>发表时间</td><td>管理操作</td></tr>
+{{for blog in blogs:}}
+<tr><td>{{=blog.title}}</td><td>{{=blog.ray_comment.count()}}</td><td>{{=blog.created_date}}</td><td>{{=A('编辑',_href=URL('edit_blog', args=[str(blog.id)]))}}&nbsp;{{=A('删除',_href=URL('delete_blog', args=[str(blog.id)]))}}</td></tr>
+{{pass}}
+</table>
+{{include 'include_functions.html'}}
+    {{if len(request.args) > 0:}}
+        {{pagination(blogs_totalpages, blogs_pageid, URL(r=request, args=[request.args[0]]))}}
+    {{else:}}
+        {{pagination(blogs_totalpages, blogs_pageid, URL(r=request, args=[selected_category.id]))}}
+    {{pass}}
+{{pass}}
+
+</p>

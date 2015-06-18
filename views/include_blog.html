@@ -1,0 +1,7 @@
+<div class="blogContainer">
+        <div class="blogTime">{{=IMG(_src=URL('static', 'images/date_icon_blue.gif'),_alt="",_height="10",_width="10")}}{{=blog.created_date}}</div>
+        <div class="blogTitle">{{=blog.title}}</div>
+        <div class="blogContent">{{=XML(blog.text, sanitize=False)}}</div>    
+        <div class="blogInfo">由wulliam发表于{{=blog.created_date}}｜{{=A(blog.category_id.name, _href=URL('category', args=[blog.category_id.id]))}}|{{=A('查看',_href=URL('view',args=[blog.id]))}} {{=blog.count}}次|{{=A('评论',_href=URL('view',args=[blog.id])+'#blogComment')}}{{=blog.ray_comment.count()}}篇</div>
+        <hr noshade>
+</div>

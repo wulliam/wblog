@@ -1,0 +1,57 @@
+{{if globals().get('categories') is not None:}}
+<div id="information">
+<br>
+{{=IMG(_src=URL("static", "images/sidebar_icon.gif"), _height="32", _width="22")}}
+<strong>+导航</strong>
+<br>
+共有日志:{{=total_number_of_blogs}}<br>
+共有评论:{{=total_number_of_comments}}<br>
+访问次数:{{=total_number_of_visit}}<br>
+<br>
+</div>
+<div id="nav">
+<br>
+{{=IMG(_src=URL("static", "images/sidebar_icon.gif"), _height="32", _width="22")}}
+<strong>+导航</strong>
+<br>
+{{=A('首页', _href=URL("blog"))}}<br>
+<!-- {{=A('关于我', _href=URL("aboutme"))}}<br> -->
+{{=A('留言', _href=URL("guestbook"))}}<br>
+{{=A('管理', _href=URL("login"))}}<br>
+</div>
+<div id="blogCategory">
+<br>
+{{=IMG(_src=URL("static", "images/sidebar_icon.gif"), _height="32", _width="22")}}
+<strong>+分类</strong>
+<br>
+{{for category in  categories:}}
+{{=A(category.name+'('+str(category.ray_blog.count())+')', _href=URL('category', args=[category.id]))}}<br>
+{{pass}}
+</div>
+{{pass}}
+{{if globals().get('latest_comments') is not None:}}
+<div id="blogComment">
+<br>
+{{=IMG(_src=URL("static", "images/sidebar_icon.gif"), _height="32", _width="22")}}
+<strong>+最新评论</strong>
+<br>
+{{for comment in  latest_comments:}}
+{{=A(comment.title, _href=URL('view', args=[comment.blog_id.id])+'#blogComment')}}<br>
+{{pass}}
+</div>
+{{pass}}
+{{if globals().get('links') is not None:}}
+<div id="links">
+<br>
+{{=IMG(_src=URL("static", "images/sidebar_icon.gif"), _height="32", _width="22")}}
+<strong>+链接</strong>
+<br>
+{{for link in  links:}}
+{{=A(link.name, _href=link.url)}}<br>
+{{pass}}
+</div>
+{{pass}}
+
+<div>
+<br>
+<iframe width="100%" height="550" class="share_self"  frameborder="0" scrolling="no" src="http://widget.weibo.com/weiboshow/index.php?language=&width=0&height=550&fansRow=2&ptype=1&speed=0&skin=1&isTitle=1&noborder=1&isWeibo=1&isFans=1&uid=1053960943&verifier=02781ba4&dpc=1"></iframe><div><br>

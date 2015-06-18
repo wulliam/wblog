@@ -1,0 +1,11 @@
+{{if blogs is not None:}}
+    {{include 'include_functions.html'}}
+    {{for blog in blogs:}}
+    {{include 'include_blog.html'}}
+    {{pass}}
+    {{if len(request.args) > 0:}}
+        {{pagination(blogs_totalpages, blogs_pageid, URL(r=request, args=[request.args[0]]))}}
+    {{else:}}
+        {{pagination(blogs_totalpages, blogs_pageid, URL(r=request, args=[selected_category.id]))}}
+    {{pass}}
+{{pass}}

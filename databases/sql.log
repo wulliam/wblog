@@ -1,0 +1,537 @@
+timestamp: 2011-09-06T00:19:17.468000
+CREATE TABLE auth_user(
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    first_name CHAR(128),
+    last_name CHAR(128),
+    email CHAR(512),
+    password CHAR(512),
+    registration_key CHAR(512),
+    reset_password_key CHAR(512)
+);
+success!
+timestamp: 2011-09-06T00:19:17.562000
+CREATE TABLE auth_group(
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    role CHAR(512),
+    description TEXT
+);
+success!
+timestamp: 2011-09-06T00:19:17.640000
+CREATE TABLE auth_membership(
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    user_id INTEGER REFERENCES auth_user(id) ON DELETE CASCADE,
+    group_id INTEGER REFERENCES auth_group(id) ON DELETE CASCADE
+);
+success!
+timestamp: 2011-09-06T00:19:17.734000
+CREATE TABLE auth_permission(
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    group_id INTEGER REFERENCES auth_group(id) ON DELETE CASCADE,
+    name CHAR(512),
+    table_name CHAR(512),
+    record_id INTEGER
+);
+success!
+timestamp: 2011-09-06T00:19:17.828000
+CREATE TABLE auth_event(
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    time_stamp TIMESTAMP,
+    client_ip CHAR(512),
+    user_id INTEGER REFERENCES auth_user(id) ON DELETE CASCADE,
+    origin CHAR(512),
+    description TEXT
+);
+success!
+timestamp: 2011-09-06T00:19:17.937000
+CREATE TABLE auth_cas(
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    user_id INTEGER REFERENCES auth_user(id) ON DELETE CASCADE,
+    created_on TIMESTAMP,
+    url CHAR(512),
+    uuid CHAR(512)
+);
+success!
+timestamp: 2011-09-06T00:23:53.640000
+CREATE TABLE ray_about(
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    title CHAR(512),
+    name CHAR(512),
+    value CHAR(512),
+    description CHAR(512),
+    type CHAR(512)
+);
+success!
+timestamp: 2011-09-06T00:24:23.718000
+CREATE TABLE ray_admin(
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    admin_name CHAR(512),
+    admin_pass CHAR(512)
+);
+success!
+timestamp: 2011-09-06T00:24:23.796000
+CREATE TABLE ray_category(
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    category_name CHAR(512),
+    category_order INTEGER
+);
+success!
+timestamp: 2011-09-06T00:24:39.843000
+CREATE TABLE ray_blog(
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    title CHAR(512),
+    text TEXT,
+    category INTEGER REFERENCES ray_category(id) ON DELETE CASCADE,
+    created_date TIMESTAMP,
+    count INTEGER
+);
+success!
+timestamp: 2011-09-06T00:28:09.687000
+ALTER TABLE ray_blog ADD category_id INTEGER REFERENCES ray_category(id) ON DELETE CASCADE;
+timestamp: 2011-09-06T00:28:09.796000
+CREATE TABLE ray_comment(
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    title CHAR(512),
+    text CHAR(512),
+    name CHAR(512),
+    email CHAR(512),
+    created_date TIMESTAMP,
+    blog_id INTEGER REFERENCES ray_blog(id) ON DELETE CASCADE,
+    category_id INTEGER REFERENCES ray_category(id) ON DELETE CASCADE,
+    comment_id INTEGER REFERENCES ray_comment(id) ON DELETE CASCADE
+);
+success!
+timestamp: 2011-09-06T00:28:09.906000
+CREATE TABLE ray_count(
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    count INTEGER
+);
+success!
+timestamp: 2011-09-06T00:28:10.015000
+CREATE TABLE ray_gestbook(
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    name CHAR(512),
+    email CHAR(512),
+    text CHAR(512),
+    created_date TIMESTAMP,
+    reply CHAR(512),
+    site CHAR(512)
+);
+success!
+timestamp: 2011-09-06T00:28:42.750000
+CREATE TABLE ray_link(
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    name CHAR(512),
+    url CHAR(512),
+    description CHAR(512),
+    visiable CHAR(512)
+);
+success!
+timestamp: 2011-09-06T00:28:42.828000
+CREATE TABLE ray_setting(
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    name CHAR(512),
+    title CHAR(512),
+    value CHAR(512),
+    description CHAR(512)
+);
+success!
+timestamp: 2011-09-16T00:39:59.346000
+CREATE TABLE ray_about(
+    id INT AUTO_INCREMENT NOT NULL,
+    title VARCHAR(255),
+    name VARCHAR(255),
+    value VARCHAR(255),
+    description VARCHAR(255),
+    type VARCHAR(255),
+    PRIMARY KEY(id)
+) ENGINE=InnoDB CHARACTER SET utf8;
+success!
+timestamp: 2011-09-16T00:39:59.455000
+CREATE TABLE ray_admin(
+    id INT AUTO_INCREMENT NOT NULL,
+    admin_name VARCHAR(255),
+    admin_pass VARCHAR(255),
+    PRIMARY KEY(id)
+) ENGINE=InnoDB CHARACTER SET utf8;
+success!
+timestamp: 2011-09-16T00:39:59.518000
+CREATE TABLE ray_category(
+    id INT AUTO_INCREMENT NOT NULL,
+    category_name VARCHAR(255),
+    category_order INT,
+    PRIMARY KEY(id)
+) ENGINE=InnoDB CHARACTER SET utf8;
+success!
+timestamp: 2011-09-16T00:39:59.612000
+CREATE TABLE ray_blog(
+    id INT AUTO_INCREMENT NOT NULL,
+    title VARCHAR(255),
+    text LONGTEXT,
+    category_id INT, INDEX category_id__idx (category_id), FOREIGN KEY (category_id) REFERENCES ray_category(id) ON DELETE CASCADE,
+    created_date DATETIME,
+    count INT,
+    PRIMARY KEY(id)
+) ENGINE=InnoDB CHARACTER SET utf8;
+success!
+timestamp: 2011-09-16T00:39:59.737000
+CREATE TABLE ray_comment(
+    id INT AUTO_INCREMENT NOT NULL,
+    title VARCHAR(255),
+    text VARCHAR(255),
+    name VARCHAR(255),
+    email VARCHAR(255),
+    created_date DATETIME,
+    blog_id INT, INDEX blog_id__idx (blog_id), FOREIGN KEY (blog_id) REFERENCES ray_blog(id) ON DELETE CASCADE,
+    category_id INT, INDEX category_id__idx (category_id), FOREIGN KEY (category_id) REFERENCES ray_category(id) ON DELETE CASCADE,
+    comment_id INT, INDEX comment_id__idx (comment_id), FOREIGN KEY (comment_id) REFERENCES ray_comment(id) ON DELETE CASCADE,
+    PRIMARY KEY(id)
+) ENGINE=InnoDB CHARACTER SET utf8;
+success!
+timestamp: 2011-09-16T00:39:59.862000
+CREATE TABLE ray_count(
+    id INT AUTO_INCREMENT NOT NULL,
+    count INT,
+    PRIMARY KEY(id)
+) ENGINE=InnoDB CHARACTER SET utf8;
+success!
+timestamp: 2011-09-16T00:39:59.987000
+CREATE TABLE ray_gestbook(
+    id INT AUTO_INCREMENT NOT NULL,
+    name VARCHAR(255),
+    email VARCHAR(255),
+    text VARCHAR(255),
+    created_date DATETIME,
+    reply VARCHAR(255),
+    site VARCHAR(255),
+    PRIMARY KEY(id)
+) ENGINE=InnoDB CHARACTER SET utf8;
+success!
+timestamp: 2011-09-16T00:40:00.080000
+CREATE TABLE ray_link(
+    id INT AUTO_INCREMENT NOT NULL,
+    name VARCHAR(255),
+    url VARCHAR(255),
+    description VARCHAR(255),
+    visiable VARCHAR(255),
+    PRIMARY KEY(id)
+) ENGINE=InnoDB CHARACTER SET utf8;
+success!
+timestamp: 2011-09-16T00:40:00.174000
+CREATE TABLE ray_setting(
+    id INT AUTO_INCREMENT NOT NULL,
+    name VARCHAR(255),
+    title VARCHAR(255),
+    value VARCHAR(255),
+    description VARCHAR(255),
+    PRIMARY KEY(id)
+) ENGINE=InnoDB CHARACTER SET utf8;
+success!
+timestamp: 2011-09-17T11:18:04.343000
+ALTER TABLE ray_category ADD order INT;
+timestamp: 2011-09-17T11:19:19.859000
+ALTER TABLE ray_category ADD name VARCHAR(255);
+success!
+timestamp: 2011-09-17T11:19:20.140000
+ALTER TABLE ray_category ADD corder INT;
+success!
+timestamp: 2011-09-17T11:19:20.312000
+ALTER TABLE ray_category DROP COLUMN category_order;
+success!
+timestamp: 2011-09-17T11:19:20.500000
+ALTER TABLE ray_category DROP COLUMN category_name;
+success!
+timestamp: 2011-09-18T13:58:08.703000
+CREATE TABLE auth_user(
+    id INT AUTO_INCREMENT NOT NULL,
+    first_name VARCHAR(128),
+    last_name VARCHAR(128),
+    email VARCHAR(255),
+    password VARCHAR(255),
+    registration_key VARCHAR(255),
+    reset_password_key VARCHAR(255),
+    PRIMARY KEY(id)
+) ENGINE=InnoDB CHARACTER SET utf8;
+success!
+timestamp: 2011-09-18T13:58:08.828000
+CREATE TABLE auth_group(
+    id INT AUTO_INCREMENT NOT NULL,
+    role VARCHAR(255),
+    description LONGTEXT,
+    PRIMARY KEY(id)
+) ENGINE=InnoDB CHARACTER SET utf8;
+success!
+timestamp: 2011-09-18T13:58:08.937000
+CREATE TABLE auth_membership(
+    id INT AUTO_INCREMENT NOT NULL,
+    user_id INT, INDEX user_id__idx (user_id), FOREIGN KEY (user_id) REFERENCES auth_user(id) ON DELETE CASCADE,
+    group_id INT, INDEX group_id__idx (group_id), FOREIGN KEY (group_id) REFERENCES auth_group(id) ON DELETE CASCADE,
+    PRIMARY KEY(id)
+) ENGINE=InnoDB CHARACTER SET utf8;
+success!
+timestamp: 2011-09-18T13:58:09.046000
+CREATE TABLE auth_permission(
+    id INT AUTO_INCREMENT NOT NULL,
+    group_id INT, INDEX group_id__idx (group_id), FOREIGN KEY (group_id) REFERENCES auth_group(id) ON DELETE CASCADE,
+    name VARCHAR(255),
+    table_name VARCHAR(255),
+    record_id INT,
+    PRIMARY KEY(id)
+) ENGINE=InnoDB CHARACTER SET utf8;
+success!
+timestamp: 2011-09-18T13:58:09.140000
+CREATE TABLE auth_event(
+    id INT AUTO_INCREMENT NOT NULL,
+    time_stamp DATETIME,
+    client_ip VARCHAR(255),
+    user_id INT, INDEX user_id__idx (user_id), FOREIGN KEY (user_id) REFERENCES auth_user(id) ON DELETE CASCADE,
+    origin VARCHAR(255),
+    description LONGTEXT,
+    PRIMARY KEY(id)
+) ENGINE=InnoDB CHARACTER SET utf8;
+success!
+timestamp: 2011-09-18T13:58:09.234000
+CREATE TABLE auth_cas(
+    id INT AUTO_INCREMENT NOT NULL,
+    user_id INT, INDEX user_id__idx (user_id), FOREIGN KEY (user_id) REFERENCES auth_user(id) ON DELETE CASCADE,
+    created_on DATETIME,
+    url VARCHAR(255),
+    uuid VARCHAR(255),
+    PRIMARY KEY(id)
+) ENGINE=InnoDB CHARACTER SET utf8;
+success!
+timestamp: 2011-09-18T15:40:30.531000
+ALTER TABLE ray_comment ADD comment_id__tmp INT;
+success!
+UPDATE ray_comment SET comment_id__tmp=comment_id;
+success!
+ALTER TABLE ray_comment DROP COLUMN comment_id;
+timestamp: 2011-09-18T23:57:37.156000
+ALTER TABLE ray_link ADD visible VARCHAR(255);
+success!
+timestamp: 2011-09-18T23:57:37.375000
+ALTER TABLE ray_link DROP COLUMN visiable;
+success!
+timestamp: 2011-09-19T00:01:01.093000
+CREATE TABLE ray_guestbook(
+    id INT AUTO_INCREMENT NOT NULL,
+    name VARCHAR(255),
+    email VARCHAR(255),
+    text VARCHAR(255),
+    created_date DATETIME,
+    reply VARCHAR(255),
+    site VARCHAR(255),
+    PRIMARY KEY(id)
+) ENGINE=InnoDB CHARACTER SET utf8;
+success!
+timestamp: 2011-11-14T22:11:19.605864
+CREATE TABLE auth_user(
+    id INT AUTO_INCREMENT NOT NULL,
+    first_name VARCHAR(128),
+    last_name VARCHAR(128),
+    email VARCHAR(255),
+    password VARCHAR(255),
+    registration_key VARCHAR(255),
+    reset_password_key VARCHAR(255),
+    PRIMARY KEY(id)
+) ENGINE=InnoDB CHARACTER SET utf8;
+success!
+timestamp: 2011-11-14T22:11:19.738616
+CREATE TABLE auth_group(
+    id INT AUTO_INCREMENT NOT NULL,
+    role VARCHAR(255),
+    description LONGTEXT,
+    PRIMARY KEY(id)
+) ENGINE=InnoDB CHARACTER SET utf8;
+success!
+timestamp: 2011-11-14T22:11:19.857716
+CREATE TABLE auth_membership(
+    id INT AUTO_INCREMENT NOT NULL,
+    user_id INT, INDEX user_id__idx (user_id), FOREIGN KEY (user_id) REFERENCES auth_user(id) ON DELETE CASCADE,
+    group_id INT, INDEX group_id__idx (group_id), FOREIGN KEY (group_id) REFERENCES auth_group(id) ON DELETE CASCADE,
+    PRIMARY KEY(id)
+) ENGINE=InnoDB CHARACTER SET utf8;
+success!
+timestamp: 2011-11-14T22:11:20.010206
+CREATE TABLE auth_permission(
+    id INT AUTO_INCREMENT NOT NULL,
+    group_id INT, INDEX group_id__idx (group_id), FOREIGN KEY (group_id) REFERENCES auth_group(id) ON DELETE CASCADE,
+    name VARCHAR(255),
+    table_name VARCHAR(255),
+    record_id INT,
+    PRIMARY KEY(id)
+) ENGINE=InnoDB CHARACTER SET utf8;
+success!
+timestamp: 2011-11-14T22:11:20.112341
+CREATE TABLE auth_event(
+    id INT AUTO_INCREMENT NOT NULL,
+    time_stamp DATETIME,
+    client_ip VARCHAR(255),
+    user_id INT, INDEX user_id__idx (user_id), FOREIGN KEY (user_id) REFERENCES auth_user(id) ON DELETE CASCADE,
+    origin VARCHAR(255),
+    description LONGTEXT,
+    PRIMARY KEY(id)
+) ENGINE=InnoDB CHARACTER SET utf8;
+success!
+timestamp: 2011-11-14T22:11:20.219718
+CREATE TABLE auth_cas(
+    id INT AUTO_INCREMENT NOT NULL,
+    user_id INT, INDEX user_id__idx (user_id), FOREIGN KEY (user_id) REFERENCES auth_user(id) ON DELETE CASCADE,
+    created_on DATETIME,
+    url VARCHAR(255),
+    uuid VARCHAR(255),
+    PRIMARY KEY(id)
+) ENGINE=InnoDB CHARACTER SET utf8;
+success!
+timestamp: 2011-11-14T22:11:20.309023
+CREATE TABLE ray_about(
+    id INT AUTO_INCREMENT NOT NULL,
+    title VARCHAR(255),
+    name VARCHAR(255),
+    value VARCHAR(255),
+    description VARCHAR(255),
+    type VARCHAR(255),
+    PRIMARY KEY(id)
+) ENGINE=InnoDB CHARACTER SET utf8;
+success!
+timestamp: 2011-11-14T22:11:20.401967
+CREATE TABLE ray_admin(
+    id INT AUTO_INCREMENT NOT NULL,
+    admin_name VARCHAR(255),
+    admin_pass VARCHAR(255),
+    PRIMARY KEY(id)
+) ENGINE=InnoDB CHARACTER SET utf8;
+success!
+timestamp: 2011-11-14T22:11:20.503907
+CREATE TABLE ray_category(
+    id INT AUTO_INCREMENT NOT NULL,
+    name VARCHAR(255),
+    corder INT,
+    PRIMARY KEY(id)
+) ENGINE=InnoDB CHARACTER SET utf8;
+success!
+timestamp: 2011-11-14T22:11:20.607371
+CREATE TABLE ray_blog(
+    id INT AUTO_INCREMENT NOT NULL,
+    title VARCHAR(255),
+    text LONGTEXT,
+    category_id INT, INDEX category_id__idx (category_id), FOREIGN KEY (category_id) REFERENCES ray_category(id) ON DELETE CASCADE,
+    created_date DATETIME,
+    count INT,
+    PRIMARY KEY(id)
+) ENGINE=InnoDB CHARACTER SET utf8;
+success!
+timestamp: 2011-11-14T22:11:20.693325
+CREATE TABLE ray_comment(
+    id INT AUTO_INCREMENT NOT NULL,
+    title VARCHAR(255),
+    text VARCHAR(255),
+    name VARCHAR(255),
+    email VARCHAR(255),
+    created_date DATETIME,
+    blog_id INT, INDEX blog_id__idx (blog_id), FOREIGN KEY (blog_id) REFERENCES ray_blog(id) ON DELETE CASCADE,
+    category_id INT, INDEX category_id__idx (category_id), FOREIGN KEY (category_id) REFERENCES ray_category(id) ON DELETE CASCADE,
+    comment_id INT,
+    PRIMARY KEY(id)
+) ENGINE=InnoDB CHARACTER SET utf8;
+success!
+timestamp: 2011-11-14T22:11:20.811268
+CREATE TABLE ray_count(
+    id INT AUTO_INCREMENT NOT NULL,
+    count INT,
+    PRIMARY KEY(id)
+) ENGINE=InnoDB CHARACTER SET utf8;
+success!
+timestamp: 2011-11-14T22:11:20.921962
+CREATE TABLE ray_guestbook(
+    id INT AUTO_INCREMENT NOT NULL,
+    name VARCHAR(255),
+    email VARCHAR(255),
+    text VARCHAR(255),
+    created_date DATETIME,
+    reply VARCHAR(255),
+    site VARCHAR(255),
+    PRIMARY KEY(id)
+) ENGINE=InnoDB CHARACTER SET utf8;
+success!
+timestamp: 2011-11-14T22:11:21.008312
+CREATE TABLE ray_link(
+    id INT AUTO_INCREMENT NOT NULL,
+    name VARCHAR(255),
+    url VARCHAR(255),
+    description VARCHAR(255),
+    visible VARCHAR(255),
+    PRIMARY KEY(id)
+) ENGINE=InnoDB CHARACTER SET utf8;
+success!
+timestamp: 2011-11-14T22:11:21.093403
+CREATE TABLE ray_setting(
+    id INT AUTO_INCREMENT NOT NULL,
+    name VARCHAR(255),
+    title VARCHAR(255),
+    value VARCHAR(255),
+    description VARCHAR(255),
+    PRIMARY KEY(id)
+) ENGINE=InnoDB CHARACTER SET utf8;
+success!
+timestamp: 2011-12-01T00:26:21.370660
+CREATE TABLE ray_visit(
+    id INT AUTO_INCREMENT NOT NULL,
+    remote_addr VARCHAR(255),
+    user_agent VARCHAR(255),
+    created_date DATETIME,
+    PRIMARY KEY(id)
+) ENGINE=InnoDB CHARACTER SET utf8;
+success!
+timestamp: 2011-12-01T00:26:21.624847
+CREATE TABLE ray_visitlog(
+    id INT AUTO_INCREMENT NOT NULL,
+    remote_addr VARCHAR(255),
+    visit_url VARCHAR(255),
+    function VARCHAR(255),
+    created_date DATETIME,
+    PRIMARY KEY(id)
+) ENGINE=InnoDB CHARACTER SET utf8;
+success!
+timestamp: 2011-12-19T23:32:02.983920
+ALTER TABLE ray_visitlog DROP COLUMN function;
+success!
+timestamp: 2012-03-01T00:31:31.225740
+CREATE TABLE ray_about(
+    id INT AUTO_INCREMENT NOT NULL,
+    title VARCHAR(255),
+    name VARCHAR(255),
+    value VARCHAR(255),
+    description VARCHAR(255),
+    type VARCHAR(255),
+    PRIMARY KEY(id)
+) ENGINE=InnoDB CHARACTER SET utf8;
+timestamp: 2012-03-01T00:42:38.679052
+CREATE TABLE ray_about(
+    id INT AUTO_INCREMENT NOT NULL,
+    title VARCHAR(255),
+    name VARCHAR(255),
+    value VARCHAR(255),
+    description VARCHAR(255),
+    type VARCHAR(255),
+    PRIMARY KEY(id)
+) ENGINE=InnoDB CHARACTER SET utf8;
+timestamp: 2012-03-01T00:44:22.923926
+CREATE TABLE ray_about(
+    id INT AUTO_INCREMENT NOT NULL,
+    title VARCHAR(255),
+    name VARCHAR(255),
+    value VARCHAR(255),
+    description VARCHAR(255),
+    type VARCHAR(255),
+    PRIMARY KEY(id)
+) ENGINE=InnoDB CHARACTER SET utf8;
+timestamp: 2012-03-01T00:45:29.303088
+CREATE TABLE ray_about(
+    id INT AUTO_INCREMENT NOT NULL,
+    title VARCHAR(255),
+    name VARCHAR(255),
+    value VARCHAR(255),
+    description VARCHAR(255),
+    type VARCHAR(255),
+    PRIMARY KEY(id)
+) ENGINE=InnoDB CHARACTER SET utf8;

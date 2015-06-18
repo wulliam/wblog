@@ -1,0 +1,21 @@
+{{extend 'admin_layout.html'}}
+{{if guestbooks is not None:}}
+<table>
+<tr><td>名</td><td>email</td><td>text</td><td>site</td><td>管理操作</td></tr>
+{{for guestbook in guestbooks:}}
+<tr>
+<td>{{=guestbook.name}}</td><td>{{=guestbook.email}}</td><td>{{=guestbook.text}}</td><td>{{=guestbook.site}}</td><td>{{=A('编辑',_href=URL('edit_guestbook', args=[str(guestbook.id)]))}}&nbsp;{{=A('删除',_href=URL('delete_guestbook', args=[str(guestbook.id)]))}}</td>
+</tr>
+{{pass}}
+</table>
+
+{{include 'include_functions.html'}}
+{{pagination(guestbooks_totalpages, guestbooks_pageid, URL(r=request))}}
+{{pass}}
+
+</p>
+
+{{pass}}
+
+<br/>
+

@@ -1,0 +1,80 @@
+<html>
+<head>
+<title></title>
+<META content="text/html; charset=UTF-8" http-equiv="Content-Type" />
+<META HTTP-EQUIV="Cache-Control" CONTENT="max-age=0">
+<META HTTP-EQUIV="Pragma" CONTENT="no-cache">
+<script language="javascript" type="text/javascript"
+	src="{{=URL('static','js/tiny_mce/tiny_mce.js')}}"></script>
+<script type="text/javascript">
+	tinyMCE
+			.init({
+
+				language : 'zh',
+				mode : "textareas",
+				theme : "advanced",
+				add_unload_trigger : false,
+				plugins : 'safari',
+				elements : "reply_editor",
+				theme : "advanced",
+				plugins : 'safari,emotions',
+				button_tile_map : true,
+				theme_advanced_buttons1 : "bold,italic,underline,strikethrough,separator,link,unlink,separator,forecolor,backcolor,fontselect,fontsizeselect,emotions",
+				theme_advanced_buttons2 : "",
+				theme_advanced_buttons3 : "",
+
+				theme_advanced_toolbar_location : "top",
+				theme_advanced_toolbar_align : "left",
+				theme_advanced_statusbar_location : "bottom",
+
+			});
+</script>
+<!-- All JavaScript at the bottom, except for Modernizr which enables HTML5 elements & feature detects -->
+    <script src="{{=URL('static','js/modernizr-1.7.min.js')}}"></script>
+    
+    {{#------  require CSS and JS files for this page (read info in base.css) ------}}
+    {{response.files.append(URL('static','css/base.css'))}}
+    {{response.files.append(URL('static','css/superfish.css'))}}
+    {{response.files.append(URL('static','js/superfish.js'))}}
+    {{#------ include web2py specific js code (jquery, calendar, form stuff) ------}}
+    {{include 'web2py_ajax.html'}}
+<link rel="stylesheet" type="text/css" href="{{=URL('static','css/default.css')}}">
+</head>
+<body>
+    
+	<div id="main">
+	<div class="flash">{{=response.flash or ''}}</div> <!-- notification div -->
+	{{block header}} <!-- this is default header -->  
+		<div id="header">
+			<div id="blogTitle">wulliam's note</div>
+			<div id="blogDescription">
+				忍者大师如是说：“设计一个千百万程序的操作系统很容易，要改变一个人的本性却困难得多。” --- 《编程之禅》</div>
+
+		</div>
+	{{end}}
+	{{block statusbar}} <!-- this is default statusbar -->
+		<div id="headerSpace"></div>
+		<div style="clear: both;"></div><!-- Clear the divs --> 
+	{{end}}
+		<div id="contain">
+			<div id="mainbg">
+				<div id="right">
+{{include}}
+				</div>
+				<div id="left">
+{{block left_sidebar}}
+{{include 'leftside.html'}}
+{{end}}
+				</div>
+			</div>
+		</div>
+
+{{block footer}} <!-- this is default footer -->
+		<div id="footer">
+			<p>&nbsp;</p>
+			<p align="center">{{=T('Copyright')}} &#169; 2010 This is ray blog adminATwuliang.org</p>
+		</div>
+{{end}} 
+	</div>
+</body>
+</html>

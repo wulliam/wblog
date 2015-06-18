@@ -1,0 +1,25 @@
+{{def pagination(totalpages, pageid, pageurl):}}
+{{##print totalpages,pageid,pageurl}}
+{{ if totalpages > 1:}}
+<div class="pages">
+<script type="text/JavaScript">
+            <!--
+            function MM_jumpMenu(targ,selObj,restore){ //v3.0
+                eval(targ+".location='"+selObj.options[selObj.selectedIndex].value+"'");
+                if (restore) selObj.selectedIndex=0;
+            }
+            //-->
+</script>
+<select name="menu1" onChange="MM_jumpMenu('parent',this,0)">
+{{ for i in range(1, totalpages+1): }}
+    {{if pageid == i:}}
+        {{=OPTION('page ' + str(i), _value=pageurl + '/'+str(i),_selected='selected')}}
+    {{else:}}
+        {{=OPTION('page ' + str(i), _value=pageurl + '/'+str(i))}}
+    {{pass}}
+{{ pass }}
+</select>
+    <div style="clear: both;"></div>
+</div>
+{{ pass }}
+{{return}}

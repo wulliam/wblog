@@ -1,0 +1,16 @@
+{{extend 'layout.html'}}
+{{=guestbook_form}}
+{{if guestbooks is not None:}}
+    {{include 'include_functions.html'}}
+    {{for guestbook in guestbooks:}}
+        <div class='blogtitle'>由{{=guestbook.name}}发表于{{=guestbook.created_date}}</div>
+	<div clas='guestbook_email_text'>{{=guestbook.text}}</div>
+	<div cass='guestbook_email'>{{=guestbook.name}}的电子邮箱地址:{{=guestbook.email}}</div>
+	<div class='guestbook_site'>{{=guestbook.name}}的个人网站:{{=guestbook.site}}</div>
+	{{if guestbook.reply is not None and guestbook.reply.strip(): }}
+	<div class='guestbook_replay'>管理员回复:{{=guestbook.reply}}</div>
+	{{pass}}
+	<p>
+    {{pass}}
+    {{pagination(guestbooks_totalpages, guestbooks_pageid, URL(r=request))}}
+{{pass}}

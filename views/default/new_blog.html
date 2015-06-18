@@ -1,0 +1,23 @@
+{{response.files.append(URL('static','js/tiny_mce/tiny_mce.js'))}}
+{{extend 'admin_layout.html'}}
+{{block custome_header}}
+{{
+"""
+<script type="text/javascript">
+tinyMCE.init({
+    language : 'zh',  
+    mode : "textareas",
+    theme : "advanced",
+    add_unload_trigger : false,
+    plugins : 'safari',     
+    theme_advanced_toolbar_location : "top",
+    theme_advanced_toolbar_align : "left",
+    theme_advanced_statusbar_location : "bottom",
+    //theme_advanced_resizing : true,
+    apply_source_formatting : 0,
+});
+</script>
+"""
+}}
+{{end custome_header}}
+{{=blog_form}}

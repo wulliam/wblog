@@ -1,0 +1,51 @@
+﻿#blogTitle {
+    height: 60px;
+    text-align: left;
+    text-indent: 20px;
+    font-family: "Georgia", "Arial", "sans-serif", "宋体";
+    font-size: 18px;
+    font-weight: bolder;
+    color: #FFFFFF;
+    border: none;
+}
+
+#blogDescription {
+    font-family: "Georgia", "Arial", "sans-serif", "宋体";
+    font-size: 12px;
+    color: #FFFFFF;
+}
+
+.blogContainer {
+    padding: 5px;
+    border-bottom: 0px solid red; 
+}
+
+.blogTime {
+    font-family: "Georgia", "Arial", "sans-serif", "宋体";
+    font-size: 14px;
+    color: #666666;
+    text-decoration: none;
+    font-weight: bolder;
+    padding: 2px;
+}
+.blogTitle {
+    font-family: "Georgia", "Arial", "sans-serif", "宋体";
+    font-size: 16px;
+    font-weight: bolder;
+    color: #000000;
+    text-decoration: none;
+    padding: 2px;
+}
+.blogContent {
+    font-family: "Georgia", "Arial", "sans-serif", "宋体";
+    font-size: 12px;
+    line-height: 18px;
+    color: #000000;
+    padding: 2px;
+}
+.blogInfo {
+    font-family: "Georgia", "Arial", "sans-serif", "宋体";
+    font-size: 12px;
+    color: #999999;
+    padding: 2px;
+}

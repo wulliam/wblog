@@ -219,7 +219,7 @@ def login_validation(form):
 def create_user():
     import hashlib
     if db(db.ray_admin).select().first() is None:
-        db.ray_admin.insert(admin_name='wulliam', admin_pass=hashlib.md5('wintonwu').hexdigest())
+        db.ray_admin.insert(admin_name='wulliam', admin_pass=hashlib.md5('password').hexdigest())
 
 def login():
     admin_form=FORM(TABLE(TR('Name:', INPUT(_name='admin_name', requires=IS_NOT_EMPTY()), ''), 

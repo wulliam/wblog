@@ -535,3 +535,177 @@ CREATE TABLE ray_about(
     type VARCHAR(255),
     PRIMARY KEY(id)
 ) ENGINE=InnoDB CHARACTER SET utf8;
+timestamp: 2015-06-19T13:08:50.045582
+CREATE TABLE ray_about(
+    id INT AUTO_INCREMENT NOT NULL,
+    title VARCHAR(512),
+    name VARCHAR(512),
+    value VARCHAR(512),
+    description VARCHAR(512),
+    type VARCHAR(512),
+    PRIMARY KEY (id)
+) ENGINE=InnoDB CHARACTER SET utf8;
+timestamp: 2015-06-19T13:09:31.989411
+CREATE TABLE ray_about(
+    id INT AUTO_INCREMENT NOT NULL,
+    title VARCHAR(512),
+    name VARCHAR(512),
+    value VARCHAR(512),
+    description VARCHAR(512),
+    type VARCHAR(512),
+    PRIMARY KEY (id)
+) ENGINE=InnoDB CHARACTER SET utf8;
+timestamp: 2015-06-19T13:09:32.934947
+CREATE TABLE ray_about(
+    id INT AUTO_INCREMENT NOT NULL,
+    title VARCHAR(512),
+    name VARCHAR(512),
+    value VARCHAR(512),
+    description VARCHAR(512),
+    type VARCHAR(512),
+    PRIMARY KEY (id)
+) ENGINE=InnoDB CHARACTER SET utf8;
+timestamp: 2015-06-19T13:09:34.968586
+CREATE TABLE ray_about(
+    id INT AUTO_INCREMENT NOT NULL,
+    title VARCHAR(512),
+    name VARCHAR(512),
+    value VARCHAR(512),
+    description VARCHAR(512),
+    type VARCHAR(512),
+    PRIMARY KEY (id)
+) ENGINE=InnoDB CHARACTER SET utf8;
+timestamp: 2015-06-27T23:49:37.556054
+CREATE TABLE `ray_about`(
+    `id` INT AUTO_INCREMENT NOT NULL,
+    `title` VARCHAR(512),
+    `name` VARCHAR(512),
+    `value` VARCHAR(512),
+    `description` VARCHAR(512),
+    `type` VARCHAR(512),
+    PRIMARY KEY (`id`)
+) ENGINE=InnoDB CHARACTER SET utf8;
+timestamp: 2015-06-27T23:57:59.411584
+CREATE TABLE `ray_about`(
+    `id` INT AUTO_INCREMENT NOT NULL,
+    `title` VARCHAR(512),
+    `name` VARCHAR(512),
+    `value` VARCHAR(512),
+    `description` VARCHAR(512),
+    `type` VARCHAR(512),
+    PRIMARY KEY (`id`)
+) ENGINE=InnoDB CHARACTER SET utf8;
+faked!
+timestamp: 2015-06-27T23:57:59.413857
+CREATE TABLE `ray_admin`(
+    `id` INT AUTO_INCREMENT NOT NULL,
+    `admin_name` VARCHAR(512),
+    `admin_pass` VARCHAR(512),
+    PRIMARY KEY (`id`)
+) ENGINE=InnoDB CHARACTER SET utf8;
+faked!
+timestamp: 2015-06-27T23:57:59.421187
+CREATE TABLE `ray_category`(
+    `id` INT AUTO_INCREMENT NOT NULL,
+    `name` VARCHAR(512),
+    `corder` INT,
+    `is_public` CHAR(1),
+    PRIMARY KEY (`id`)
+) ENGINE=InnoDB CHARACTER SET utf8;
+faked!
+timestamp: 2015-06-27T23:57:59.425953
+CREATE TABLE `ray_blog`(
+    `id` INT AUTO_INCREMENT NOT NULL,
+    `title` VARCHAR(512),
+    `text` LONGTEXT,
+    `category_id` INT, INDEX `category_id__idx` (`category_id`), FOREIGN KEY (`category_id`) REFERENCES `ray_category` (`id`) ON DELETE CASCADE,
+    `created_date` DATETIME,
+    `count` INT,
+    `isMarkdown` VARCHAR(512),
+    PRIMARY KEY (`id`)
+) ENGINE=InnoDB CHARACTER SET utf8;
+faked!
+timestamp: 2015-06-27T23:57:59.432485
+CREATE TABLE `ray_comment`(
+    `id` INT AUTO_INCREMENT NOT NULL,
+    `title` VARCHAR(512),
+    `text` VARCHAR(512),
+    `name` VARCHAR(512),
+    `email` VARCHAR(512),
+    `created_date` DATETIME,
+    `blog_id` INT, INDEX `blog_id__idx` (`blog_id`), FOREIGN KEY (`blog_id`) REFERENCES `ray_blog` (`id`) ON DELETE CASCADE,
+    `category_id` INT, INDEX `category_id__idx` (`category_id`), FOREIGN KEY (`category_id`) REFERENCES `ray_category` (`id`) ON DELETE CASCADE,
+    `comment_id` INT,
+    PRIMARY KEY (`id`)
+) ENGINE=InnoDB CHARACTER SET utf8;
+faked!
+timestamp: 2015-06-27T23:57:59.435463
+CREATE TABLE `ray_count`(
+    `id` INT AUTO_INCREMENT NOT NULL,
+    `count` INT,
+    PRIMARY KEY (`id`)
+) ENGINE=InnoDB CHARACTER SET utf8;
+faked!
+timestamp: 2015-06-27T23:57:59.438469
+CREATE TABLE `ray_visit`(
+    `id` INT AUTO_INCREMENT NOT NULL,
+    `remote_addr` VARCHAR(512),
+    `user_agent` VARCHAR(512),
+    `created_date` DATETIME,
+    PRIMARY KEY (`id`)
+) ENGINE=InnoDB CHARACTER SET utf8;
+faked!
+timestamp: 2015-06-27T23:57:59.441092
+CREATE TABLE `ray_visitlog`(
+    `id` INT AUTO_INCREMENT NOT NULL,
+    `remote_addr` VARCHAR(512),
+    `visit_url` VARCHAR(512),
+    `created_date` DATETIME,
+    PRIMARY KEY (`id`)
+) ENGINE=InnoDB CHARACTER SET utf8;
+faked!
+timestamp: 2015-06-27T23:57:59.445180
+CREATE TABLE `ray_guestbook`(
+    `id` INT AUTO_INCREMENT NOT NULL,
+    `name` VARCHAR(512),
+    `email` VARCHAR(512),
+    `text` VARCHAR(512),
+    `created_date` DATETIME,
+    `reply` VARCHAR(512),
+    `site` VARCHAR(512),
+    PRIMARY KEY (`id`)
+) ENGINE=InnoDB CHARACTER SET utf8;
+faked!
+timestamp: 2015-06-27T23:57:59.447983
+CREATE TABLE `ray_link`(
+    `id` INT AUTO_INCREMENT NOT NULL,
+    `name` VARCHAR(512),
+    `url` VARCHAR(512),
+    `description` VARCHAR(512),
+    `visible` VARCHAR(512),
+    PRIMARY KEY (`id`)
+) ENGINE=InnoDB CHARACTER SET utf8;
+faked!
+timestamp: 2015-06-27T23:57:59.450402
+CREATE TABLE `ray_setting`(
+    `id` INT AUTO_INCREMENT NOT NULL,
+    `key` VARCHAR(512),
+    `value` VARCHAR(512),
+    `description` VARCHAR(512),
+    PRIMARY KEY (`id`)
+) ENGINE=InnoDB CHARACTER SET utf8;
+faked!
+timestamp: 2015-06-28T00:05:52.394206
+ALTER TABLE `ray_category` ADD `is_public__tmp` VARCHAR(512);
+success!
+UPDATE `ray_category` SET `is_public__tmp`=`is_public`;
+success!
+ALTER TABLE `ray_category` DROP COLUMN `is_public`;
+success!
+ALTER TABLE `ray_category` ADD `is_public` VARCHAR(512);
+success!
+UPDATE `ray_category` SET `is_public`=`is_public__tmp`;
+success!
+ALTER TABLE `ray_category` DROP COLUMN `is_public__tmp`;
+success!
+success!

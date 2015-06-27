@@ -47,7 +47,9 @@
 <strong>+链接</strong>
 <br>
 {{for link in  links:}}
-{{=A(link.name, _href=link.url)}}<br>
+    {{if link.visible:}}
+        {{=A(link.name, _href=link.url)}}<br>
+    {{pass}}
 {{pass}}
 </div>
 {{pass}}

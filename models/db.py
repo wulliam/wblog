@@ -105,7 +105,8 @@ db.define_table('ray_blog',
     Field('text', 'text', required=True),
     Field('category_id', db.ray_category,  required=True),
     Field('created_date', 'datetime', required=True, default=now, writable=False),
-    Field('count', 'integer',writable=False,readable=False))
+    Field('count', 'integer',writable=False,readable=False),
+    Field('isMarkdown', default=False, required=True))
 
 db.ray_blog.category_id.requires=IS_IN_DB(db, 'ray_category.id', '%(name)s')
     
@@ -153,5 +154,10 @@ db.define_table('ray_link',
 db.define_table('ray_setting',
     Field('name', required=True),
     Field('title', required=True),
+    Field('value', required=True),
+    Field('description'))
+
+db.define_table('ray_properties',
+    Field('key', required=True),
     Field('value', required=True),
     Field('description'))

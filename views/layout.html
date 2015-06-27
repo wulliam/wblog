@@ -4,6 +4,7 @@
 <META content="text/html; charset=UTF-8" http-equiv="Content-Type" />
 <META HTTP-EQUIV="Cache-Control" CONTENT="max-age=0">
 <META HTTP-EQUIV="Pragma" CONTENT="no-cache">
+{{ if response.settings is None or response.settings['blog.use.markdown'] != '1':}}
 <script language="javascript" type="text/javascript"
 	src="{{=URL('static','js/tiny_mce/tiny_mce.js')}}"></script>
 <script type="text/javascript">
@@ -29,6 +30,7 @@
 
 			});
 </script>
+{{pass}}
 <!-- All JavaScript at the bottom, except for Modernizr which enables HTML5 elements & feature detects -->
     <script src="{{=URL('static','js/modernizr-1.7.min.js')}}"></script>
     

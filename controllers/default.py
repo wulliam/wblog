@@ -50,6 +50,17 @@ def __get_latest_comments():
 def __get_links():
     return db(db.ray_link.visible == 1).select(orderby=db.ray_link.id)
 
+def __get_properties():
+    ray_properties_values = db(db.ray_properties).select()
+    print len(ray_properties_values)
+    print str(ray_properties_values)
+    settings = dict()
+    for value in ray_properties_values:
+        settings[value.key]=value.value
+        print value.key + ' ' + value.value
+    print settings['blog.use.markdown']
+    return settings
+
 def __calc_pagesize(count):
     totalpage = count / PAGE_SIZE
     if count % PAGE_SIZE != 0:
@@ -136,7 +147,7 @@ def blog():
     #print start,PAGE_SIZE,start*PAGE_SIZE
     blogs = db().select(db.ray_blog.ALL, limitby=(start*PAGE_SIZE, (start + 1)*PAGE_SIZE), orderby=~db.ray_blog.created_date) 
     blogs_totalpages = __calc_pagesize(db(db.ray_blog.id > 0).count())
-    return __append_share_dict(dict(blogs=blogs,blogs_totalpages = blogs_totalpages, blogs_pageid = start + 1))
+    return __append_share_dict(dict(blogs=blogs,blogs_totalpages = blogs_totalpages, blogs_pageid = start + 1, settings=__get_properties()))
 
 @__update_visit_log
 def category():
@@ -282,6 +293,7 @@ def new_blog():
         response.flash = 'blog saved'
     elif blog_form.errors:
         response.flash = 'blog has errors'
+    response.settings = __get_properties()
     return dict(blog_form=blog_form)
 
 def edit_blog():
@@ -296,7 +308,8 @@ def edit_blog():
         response.flash='blog saved'
     elif blog_form.errors:
         response.flash = 'blog has error'
-    return response.render('default/new_blog.html', dict(blog_form = blog_form))
+    setting=__get_properties()
+    return response.render('default/new_blog.html', dict(blog_form = blog_form, setting=__get_properties()))
 
 def delete_blog():
     if not check_login():

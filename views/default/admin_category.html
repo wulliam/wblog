@@ -4,7 +4,7 @@
 <tr><td>分类名</td><td>文章数量</td><td>管理操作</td></tr>
 {{for category in categories:}}
 <tr>
-<td>{{=category.name}}</td><td>{{=(category.ray_blog.count())}}</td><td>{{=A('编辑',_href=URL('edit_category', args=[str(category.id)]))}}&nbsp;{{=A('删除',_href=URL('delete_category', args=[str(category.id)]))}}</td>
+<td>{{=category.name}}</td><td>{{=(category.ray_blog.count())}}</td><td>{{=A('编辑',_href=URL('admin_category', args=[str(category.id)]))}}&nbsp;{{=A('删除',_href=URL('delete_category', args=[str(category.id)]))}}</td>
 </tr>
 {{pass}}
 </table>

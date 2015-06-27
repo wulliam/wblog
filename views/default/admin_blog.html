@@ -4,7 +4,7 @@
 <tr><td>分类名</td><td>文章数量</td></tr>
 {{for category in categories:}}
 <tr>
-<td>{{=A(category.name, _href=URL('admin_blog', args=[str(category.id)]) )}}</td><td>{{=(category.ray_blog.count())}}</td>
+<td>{{=A(category.name, _href=URL('admin_blog', args=['category_' + str(category.id)]) )}}</td><td>{{=(category.ray_blog.count())}}</td>
 </tr>
 {{pass}}
 </table>

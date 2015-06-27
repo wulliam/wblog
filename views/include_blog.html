@@ -9,6 +9,6 @@
               {{=XML(blog.text, sanitize=False)}}
             {{pass}}
         </div>    
-        <div class="blogInfo">由wulliam发表于{{=blog.created_date}}｜{{=A(blog.category_id.name, _href=URL('category', args=[blog.category_id.id]))}}|{{=A('查看',_href=URL('view',args=[blog.id]))}} {{=blog.count}}次|{{=A('评论',_href=URL('view',args=[blog.id])+'#blogComment')}}{{=blog.ray_comment.count()}}篇</div>
+        <div class="blogInfo">由wulliam发表于{{=blog.created_date}}｜{{=A(blog.category_id.name, _href=URL('category', args=['category_' + str(blog.category_id.id)]))}}|{{=A('查看',_href=URL('view',args=[blog.id]))}} {{=blog.count}}次|{{=A('评论',_href=URL('view',args=[blog.id])+'#blogComment')}}{{=blog.ray_comment.count()}}篇</div>
         <hr noshade>
 </div>

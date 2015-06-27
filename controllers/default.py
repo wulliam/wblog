@@ -36,11 +36,6 @@ def __txt2img(label, imgformat="PNG",
 def __random_code():
     return ''.join(random.choice(string.ascii_uppercase + string.digits) for x in range(5))
 
-def __get_default_id(id):
-    if len(request.args) > 0:
-        id = int(request.args(0))
-    return id
-
 def __get_categories():
     return db(db.ray_category).select(orderby=db.ray_category.id)
 
@@ -50,8 +45,8 @@ def __get_latest_comments():
 def __get_links():
     return db(db.ray_link.visible == 1).select(orderby=db.ray_link.id)
 
-def __get_properties():
-    ray_properties_values = db(db.ray_properties).select()
+def __get_settings():
+    ray_properties_values = db(db.ray_setting).select()
     print len(ray_properties_values)
     print str(ray_properties_values)
     settings = dict()
@@ -117,6 +112,25 @@ def __update_blog_count(func):
                     response.cookies['blog_ids']['path'] = '/'
         return func(*args, **kv)
     return myfunction
+
+def __get_request_number(key_word):
+    number = None
+    if len(request.args) > 0:
+        for var in request.args:
+            if var is not None and var.find(key_word) == 0:
+                number = int(var.replace(key_word, ''))
+    return number
+
+
+def __get_page_start():
+    start = __get_request_number('page_')
+    if start is None or start < 1:
+        start = 1
+    return start - 1
+
+def __get_category_id():
+    return __get_request_number('category_')
+
     
 left_sidebar_enabled = True
 PAGE_SIZE = 10
@@ -140,29 +154,16 @@ def identifing_code():
 
 @__update_visit_log
 def blog():
-    start = __get_default_id(0)
-    if start < 1:
-        start = 1
-    start = start - 1
+    start = __get_page_start()
     #print start,PAGE_SIZE,start*PAGE_SIZE
     blogs = db().select(db.ray_blog.ALL, limitby=(start*PAGE_SIZE, (start + 1)*PAGE_SIZE), orderby=~db.ray_blog.created_date) 
     blogs_totalpages = __calc_pagesize(db(db.ray_blog.id > 0).count())
-    return __append_share_dict(dict(blogs=blogs,blogs_totalpages = blogs_totalpages, blogs_pageid = start + 1, settings=__get_properties()))
+    return __append_share_dict(dict(blogs=blogs,blogs_totalpages = blogs_totalpages, blogs_pageid = start + 1, settings=__get_settings()))
 
 @__update_visit_log
 def category():
-    if len(request.args) > 0:
-        category_id = request.args(0)
-        start = 1
-        if len(request.args) > 1:
-            start = int(request.args(1))
-        if start < 1:
-            start = 1
-        start = start - 1
-    else:
-        category = db(db.ray_category).select().first()
-        category_id = category.id
-        start = 0
+    start = __get_page_start()
+    category_id = __get_category_id()
     selected_category =  db(db.ray_category.id == category_id).select().first()
     blogs = db(db.ray_blog.category_id == selected_category.id).select(limitby=(start*PAGE_SIZE, (start+1)*PAGE_SIZE), orderby=~db.ray_blog.created_date)
     blogs_totalpages = __calc_pagesize(db(db.ray_blog.category_id == selected_category.id).count())
@@ -201,12 +202,7 @@ def guestbook():
         response.flash = 'guestbook saved'
     elif guestbook_form.errors:
         response.flash = ' '.join(['guestbook has errors'] + [ error for error in guestbook_form.errors])
-    start = 1
-    if request.args(0) is not None:
-        start = int(request.args(0))
-    if start < 1:
-        start = 1
-    start = start -1
+    start = __get_page_start()
     guestbooks = db(db.ray_guestbook).select(limitby=(start*PAGE_SIZE, (start+1)*PAGE_SIZE), orderby=db.ray_guestbook.created_date)
     guestbooks_totalpages = __calc_pagesize(db(db.ray_guestbook).count())
     return __append_share_dict(dict(guestbooks = guestbooks, guestbooks_totalpages = guestbooks_totalpages, guestbooks_pageid = start + 1, guestbook_form = guestbook_form))
@@ -293,8 +289,8 @@ def new_blog():
         response.flash = 'blog saved'
     elif blog_form.errors:
         response.flash = 'blog has errors'
-    response.settings = __get_properties()
-    return dict(blog_form=blog_form)
+    response.settings = __get_settings()
+    return dict(blog_form=blog_form, blog_comments=None)
 
 def edit_blog():
     if not check_login():
@@ -308,8 +304,9 @@ def edit_blog():
         response.flash='blog saved'
     elif blog_form.errors:
         response.flash = 'blog has error'
-    setting=__get_properties()
-    return response.render('default/new_blog.html', dict(blog_form = blog_form, setting=__get_properties()))
+    blog_comments = db(db.ray_comment.blog_id == blog.id).select(orderby=~db.ray_comment.created_date)
+    response.settings =__get_settings()
+    return response.render('default/new_blog.html', dict(blog_form = blog_form, blog_comments = blog_comments))
 
 def delete_blog():
     if not check_login():
@@ -323,29 +320,25 @@ def delete_blog():
 def admin_blog():
     if not check_login():
         return redirect(URL('login'))
-    if len(request.args) > 0:
-        categoryId = request.args(0)
-        start = 1
-        if len(request.args) > 1:
-            start = int(request.args(1))
-            if start < 0:
-                start = 1
-        start = start - 1
+    start = __get_page_start()
+    categoryId = __get_category_id()
+    if categoryId is not None:
+        selected_category = db(db.ray_category.id == categoryId).select().first()
     else:
-        category = db(db.ray_category).select().first()
-        categoryId = category.id
-        start = 0
-    selected_category = db(db.ray_category.id == categoryId).select().first()
+        selected_category = db(db.ray_category).select().first()
     blogs = db(db.ray_blog.category_id == selected_category.id).select(limitby=(start*PAGE_SIZE,(start+1)*PAGE_SIZE), orderby=~db.ray_blog.created_date)
     blogs_totalpages = __calc_pagesize(db(db.ray_blog.category_id == selected_category.id).count())
     return dict(blogs = blogs, selected_category = selected_category, blogs_totalpages = blogs_totalpages, categories=__get_categories(), blogs_pageid = start + 1)
 
 
-
 def admin_category():
     if not check_login():
         return redirect(URL('login'))
-    category_form = SQLFORM(db.ray_category)
+    if request.args(0) is not None:
+        category = db(db.ray_category.id == request.args(0)).select().first()
+        category_form = SQLFORM(db.ray_category, record = category)
+    else:
+        category_form = SQLFORM(db.ray_category)
     if category_form.accepts(request.vars, formname='category'):
         response.flash = 'category saved'
     elif category_form.errors:
@@ -382,20 +375,8 @@ def admin_links():
         response.flash = 'link saved'
     elif link_form.errors:
         response.flash = 'link has error'
-    start = 0
-    if request.args(0) is not None:
-        start = int(request.args(0))
-    if start < 1:
-        start = 1
-    start = start -1
-    links = db(db.ray_link).select(limitby = (start*PAGE_SIZE, (start+1)*PAGE_SIZE), orderby=db.ray_link.id)
-    links_totalpages = __calc_pagesize(db(db.ray_link).count())
-    return dict(link_form = link_form, links = links, links_totalpages = links_totalpages, links_pageid = start+1)
-
-def edit_link():
-    if not check_login():
-        return redirect(URL('login'))
-    if request.args(0) is not None:
+    start = __get_page_start()
+    if request.args(0) is not None and request.args(0) != 'page':
         link_id = request.args(0)
         link = db(db.ray_link.id == link_id).select().first()
         link_form = SQLFORM(db.ray_link, record = link)
@@ -405,9 +386,25 @@ def edit_link():
         response.flash = 'link saved'
     elif link_form.errors:
         response.flash = 'link has errors'
-    return dict(link_form = link_form)
+    links = db(db.ray_link).select(limitby = (start*PAGE_SIZE, (start+1)*PAGE_SIZE), orderby=db.ray_link.id)
+    links_totalpages = __calc_pagesize(db(db.ray_link).count())
+    return dict(link_form = link_form, links = links, links_totalpages = links_totalpages, links_pageid = start+1)
         
-    
+def admin_settings():
+    if not check_login():
+        return redirect(URL('login'))
+    if request.args(0) is not None:
+        setting_id = request.args(0)
+	setting = db(db.ray_setting.id == setting_id).select().first()
+        setting_form = SQLFORM(db.ray_setting, record = setting)
+    else: 
+        setting_form = SQLFORM(db.ray_setting)
+    if setting_form.accepts(request.vars, formname='setting_form'):
+       response.flash = 'setting saved'
+    elif setting_form.errors:
+       response.flash = 'setting have error'
+    settings = db(db.ray_setting).select()
+    return dict(settings=settings, setting_form=setting_form) 
 
 def delete_link():
     if not check_login():
@@ -417,28 +414,35 @@ def delete_link():
         response.flash = 'link deleted'
     redirect(URL('admin_links'))
 
+
+def delete_setting():
+    if not check_login():
+        return redirect(URL('login'))
+    if request.args(0) is not None:
+        db(db.ray_setting.id == request.args(0)).delete()
+        response.flash = 'settign deleted'
+    redirect(URL('admin_settings'))
+
 def admin_guestbook():
     if not check_login():
         return redirect(URL('login'))
-    start = 1
-    if request.args(0) is not None:
-        start = int(requet.args(0))
-    if start < 1:
-        start = 1
-    start = start -1
+    start = __get_page_start()
+    if request.args(0) is not None and request.args(0) != 'page':
+        guestbook_id = request.args(0)
+	guestbook = db(db.ray_guestbook.id == guestbook_id).select().first()
+        guestbook_form = SQLFORM(db.ray_guestbook, record = guestbook)
+    else: 
+        guestbook_form = SQLFORM(db.ray_guestbook)
+    if guestbook_form.accepts(request.vars, formname='guestbook_form'):
+       response.flash = 'guestbook saved'
+    elif guestbook_form.errors:
+       response.flash = 'guestbook have error'
     guestbooks = db(db.ray_guestbook).select(limitby=(start*PAGE_SIZE, (start+1)*PAGE_SIZE))
     guestbooks_totalpages = __calc_pagesize(db(db.ray_guestbook).count())
-    return dict(guestbooks = guestbooks, guestbooks_totalpages = guestbooks_totalpages, guestbooks_pageid = start + 1)
+    return dict(guestbook_form = guestbook_form, guestbooks = guestbooks, guestbooks_totalpages = guestbooks_totalpages, guestbooks_pageid = start + 1)
     
 
-def reply_guestbook():
-    if not check_login():
-        return redirect(URL('login'))
-    pass
-
 def delete_guestbook():
-    if not check_login():
-        return redirect(URL('login'))
     if not check_login():
         return redirect(URL('login'))
     if request.args(0) is not None:
@@ -446,9 +450,15 @@ def delete_guestbook():
         response.flash = 'guestbook deleted'
     redirect(URL('admin_guestbook'))
 
-
-
-
+def delete_comment():
+    if not check_login():
+        return redirect(URL('login'))
+    blog_id = None
+    if request.args(0) is not None:
+        blog_id = db(db.ray_comment.id == request.args(0)).select().first().blog_id
+        db(db.ray_comment.id == request.args(0)).delete()
+        response.flash = 'comment deleted'
+    redirect(URL('edit_blog', args=[str(blog_id)]))
 
 def index():
     """

@@ -1,10 +1,10 @@
 {{extend 'admin_layout.html'}}
 {{if guestbooks is not None:}}
 <table>
-<tr><td>名</td><td>email</td><td>text</td><td>site</td><td>管理操作</td></tr>
+<tr><td>名</td><td>email</td><td>text</td><td>reply</td><td>site</td><td>管理操作</td></tr>
 {{for guestbook in guestbooks:}}
 <tr>
-<td>{{=guestbook.name}}</td><td>{{=guestbook.email}}</td><td>{{=guestbook.text}}</td><td>{{=guestbook.site}}</td><td>{{=A('编辑',_href=URL('edit_guestbook', args=[str(guestbook.id)]))}}&nbsp;{{=A('删除',_href=URL('delete_guestbook', args=[str(guestbook.id)]))}}</td>
+<td>{{=guestbook.name}}</td><td>{{=guestbook.email}}</td><td>{{=guestbook.text}}</td><td>{{=guestbook.reply}}</td><td>{{=guestbook.site}}</td><td>{{=A('编辑',_href=URL('admin_guestbook', args=[str(guestbook.id)]))}}&nbsp;{{=A('删除',_href=URL('delete_guestbook', args=[str(guestbook.id)]))}}</td>
 </tr>
 {{pass}}
 </table>
@@ -18,4 +18,8 @@
 {{pass}}
 
 <br/>
+<p>
+<b>添加新</b>
+{{=guestbook_form}}
+</p>
 

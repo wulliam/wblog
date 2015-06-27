@@ -13,9 +13,9 @@
 <select name="menu1" onChange="MM_jumpMenu('parent',this,0)">
 {{ for i in range(1, totalpages+1): }}
     {{if pageid == i:}}
-        {{=OPTION('page ' + str(i), _value=pageurl + '/'+str(i),_selected='selected')}}
+        {{=OPTION('page ' + str(i), _value=pageurl + '/page_'+str(i),_selected='selected')}}
     {{else:}}
-        {{=OPTION('page ' + str(i), _value=pageurl + '/'+str(i))}}
+        {{=OPTION('page ' + str(i), _value=pageurl + '/page_'+str(i))}}
     {{pass}}
 {{ pass }}
 </select>

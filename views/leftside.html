@@ -25,7 +25,9 @@
 <strong>+分类</strong>
 <br>
 {{for category in  categories:}}
-{{=A(category.name+'('+str(category.ray_blog.count())+')', _href=URL('category', args=[category.id]))}}<br>
+	{{if category.is_public or session.login:}}
+		{{=A(category.name+'('+str(category.ray_blog.count())+')', _href=URL('category', args=['category_'+str(category.id)]))}}<br>
+	{{pass}}
 {{pass}}
 </div>
 {{pass}}

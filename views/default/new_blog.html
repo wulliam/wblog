@@ -1,4 +1,4 @@
-{{response.files.append(URL('static','js/tiny_mce/tiny_mce.js'))}}
+{{#response.files.append(URL('static','js/tiny_mce/tiny_mce.js'))}}
 {{extend 'admin_layout.html'}}
 {{block custome_header}}
 {{
@@ -21,3 +21,16 @@ tinyMCE.init({
 }}
 {{end custome_header}}
 {{=blog_form}}
+
+<p>
+{{if blog_comments is not None:}}
+{{for blog_comment in blog_comments:}}
+<div class="blogComment">
+       <strong>{{=blog_comment.title}}</strong>{{=blog_comment.created_date}} | {{=blog_comment.name}} | {{=A('删除',_href=URL('delete_comment', args=[str(blog_comment.id)]))}}<br> 
+       <div class="commentContent">
+       {{=blog_comment.text}}
+       </div>
+</div>
+{{pass}}
+{{pass}}
+</p>

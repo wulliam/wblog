@@ -14,8 +14,8 @@ if request.env.web2py_runtime_gae:            # if running on Google App Engine
     # from google.appengine.api.memcache import Client
     # session.connect(request, response, db = MEMDB(Client()))
 else:                                         # else use a normal relational database
-    #db = DAL('sqlite://storage.sqlite')       # if not, use SQLite or other DB
-    db = DAL('mysql://root:@localhost/wblog',migrate_enabled=False)
+    #db = DAL('sqlite://storage.sqlite')       # if not, use SQLite or other DB ,fake_migrate=True
+    db = DAL('mysql://root:@localhost/wblog',migrate_enabled=True,entity_quoting=True)
 
 # by default give a view/generic.extension to all actions from localhost
 # none otherwise. a pattern can be 'controller/function.extension'
@@ -98,7 +98,8 @@ db.define_table('ray_admin',
 
 db.define_table('ray_category',
     Field('name', required=True),
-    Field('corder', 'integer', required=True))
+    Field('corder', 'integer', required=True),
+    Field('is_public', default=1, required=True))
         
 db.define_table('ray_blog',
     Field('title', required=True),
@@ -152,12 +153,6 @@ db.define_table('ray_link',
     Field('visible'))
 
 db.define_table('ray_setting',
-    Field('name', required=True),
-    Field('title', required=True),
-    Field('value', required=True),
-    Field('description'))
-
-db.define_table('ray_properties',
     Field('key', required=True),
     Field('value', required=True),
     Field('description'))

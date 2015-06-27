@@ -4,7 +4,7 @@
 <tr><td>名</td><td>url</td><td>des</td><td>visible</td><td>管理操作</td></tr>
 {{for link in links:}}
 <tr>
-<td>{{=link.name}}</td><td>{{=link.url}}</td><td>{{=link.description}}</td><td>{{=link.visible}}</td><td>{{=A('编辑',_href=URL('edit_link', args=[str(link.id)]))}}&nbsp;{{=A('删除',_href=URL('delete_link', args=[str(link.id)]))}}</td>
+<td>{{=link.name}}</td><td>{{=link.url}}</td><td>{{=link.description}}</td><td>{{=link.visible}}</td><td>{{=A('编辑',_href=URL('admin_links', args=[str(link.id)]))}}&nbsp;{{=A('删除',_href=URL('delete_link', args=[str(link.id)]))}}</td>
 </tr>
 {{pass}}
 </table>

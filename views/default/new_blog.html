@@ -22,6 +22,13 @@ tinyMCE.init({
 {{end custome_header}}
 {{=blog_form}}
 
+<div id="target"></div>
+
+<form id="myform">
+  <input type="hidden" name="preview_text" id="preview_text" />
+  <input type="submit" name="Preview" />
+</form>
+
 <p>
 {{if blog_comments is not None:}}
 {{for blog_comment in blog_comments:}}
@@ -34,3 +41,11 @@ tinyMCE.init({
 {{pass}}
 {{pass}}
 </p>
+<script>
+jQuery('#myform').submit(function() {
+  $('#preview_text').val($('#ray_blog_text').val())
+  ajax('{{=URL('preview_blog')}}',
+       ['preview_text'], 'target');
+  return false;
+});
+</script>

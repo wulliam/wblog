@@ -10,6 +10,7 @@
 #########################################################################
 import random,string
 import Image, ImageDraw, io
+from gluon.contrib.markdown.markdown2 import markdown
 
 ##identifyingCode
 def __txt2img(label, imgformat="PNG",
@@ -279,6 +280,13 @@ def change_password():
 def check_login():
     return session.login is not None and session.login == True
         
+def preview_blog():
+    if not check_login():
+        return redirect(URL('login'))
+    blog_text = "Empty"
+    if request.post_vars['preview_text'] is not None:
+        blog_text = markdown(request.post_vars['preview_text'])
+    return blog_text
         
 def new_blog():
     if not check_login():
@@ -465,7 +473,8 @@ def index():
     example action using the internationalization operator T and flash
     rendered by views/default/index.html or views/generic.html
     """
-    return dict(message=T('Hello World'))
+    #return dict(message=T('Hello World'))
+    redirect(URL('blog'))
 
 def user():
     """

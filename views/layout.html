@@ -31,6 +31,7 @@
 			});
 </script>
 {{pass}}
+<script src="{{=URL('static','js/highlight.min.js')}}"></script>
 <!-- All JavaScript at the bottom, except for Modernizr which enables HTML5 elements & feature detects -->
     <script src="{{=URL('static','js/modernizr-1.7.min.js')}}"></script>
     
@@ -41,6 +42,8 @@
     {{#------ include web2py specific js code (jquery, calendar, form stuff) ------}}
     {{include 'web2py_ajax.html'}}
 <link rel="stylesheet" type="text/css" href="{{=URL('static','css/default.css')}}">
+<link rel="stylesheet" type="text/css" href="{{=URL('static','css/hightlight/github.min.css')}}">
+
 </head>
 <body>
     
@@ -78,5 +81,19 @@
 		</div>
 {{end}} 
 	</div>
+<script src="{{=URL('static','js/highlight.min.js')}}"></script>	
+<script type="text/javascript">
+/**
+$(function(){
+	
+	hljs.initHighlighting.called = false;
+    // hightlight code
+    hljs.initHighlightingOnLoad(); 
+}
+**/
+$(document).ready(function() {
+   $('pre code').each(function(i, e) {hljs.highlightBlock(e)});
+});
+</script>
 </body>
 </html>

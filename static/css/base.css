@@ -356,12 +356,12 @@ h6 {font-size: 0.8em;}
 #wrapper {background-color: #fff; padding: 5px;} 
 #statusbar { margin: 5px 0px 20px 0px;}
 #footer {    
-    margin-top: 30px;    
+    /*margin-top: 30px;*/
     padding: 5px;    
 }
 #statusbar, #footer {    
     background: #eaeaea; 
-    border-top: 1px #aaa solid;    
+    /*border-top: 2px #aaa solid;*/
 }
 #logo {
     width: 68px;

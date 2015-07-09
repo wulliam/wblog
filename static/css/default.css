@@ -10,7 +10,7 @@ body {
 #main {
     margin: auto;
     text-align:center;
-    width: 780px;
+    width: 776px;
     background: #FFFFFF;
 }
 
@@ -56,12 +56,12 @@ input {
 }
 
 #header {
-    width: 776px;
+    width: 766px;
     margin-right: auto;
     margin-left: auto;
     padding: 0px;
     background-color: #666666;
-    border: 1px solid #ddd;
+    border: 5px solid #ddd;
 }
 
 #blogTitle {
@@ -86,8 +86,9 @@ input {
     margin-right: auto;
     margin-left: auto;
     padding: 0px;
-    height: 16px;
+    height: 4px;
     background-color: #CCCCCC;
+    clear:both;
 }
 
 #contain {
@@ -101,17 +102,17 @@ input {
     padding: 5px;
     background: #EEE;
     float: left;
-    border: 1px solid red;
+    /*border: 1px solid red;*/
 }
 
 #right {
     float: right;
     margin: 0px;
     padding: 5px 10px;
-    width: 555px;
+    width: 570px;
     background: #FFFFFF; /* #EEE */
     text-align: left;
-    border: 1px solid red;
+    /*border: 1px solid red;*/
 }
 
 #left {
@@ -121,7 +122,7 @@ input {
     background: #f5f5f5;
     width: 150px;
     text-align: left;
-    border: 1px dotted red;
+    /*border: 1px dotted red;*/
 }
 
 #footer {
@@ -225,7 +226,7 @@ input {
 
 .blogContainer {
     padding: 5px;
-    border-bottom: 1px solid red; 
+    /*border-bottom: 1px solid red; */
 }
 
 .blogTime {

@@ -1,10 +1,10 @@
 <html>
 <head>
-<title></title>
+<title>{{=settings.get('blog.use.markdown')}} {{=settings.get('show.weibo')}}</title>
 <META content="text/html; charset=UTF-8" http-equiv="Content-Type" />
 <META HTTP-EQUIV="Cache-Control" CONTENT="max-age=0">
 <META HTTP-EQUIV="Pragma" CONTENT="no-cache">
-{{ if response.settings is None or response.settings['blog.use.markdown'] != '1':}}
+{{ if  settings.get('blog.use.markdown') != str(1):}}
 <script language="javascript" type="text/javascript"
 	src="{{=URL('static','js/tiny_mce/tiny_mce.js')}}"></script>
 <script type="text/javascript">
@@ -61,6 +61,7 @@
 		<div id="headerSpace"></div>
 		<div style="clear: both;"></div><!-- Clear the divs --> 
 	{{end}}
+	<!-- contain the divs --> 
 		<div id="contain">
 			<div id="mainbg">
 				<div id="right">
@@ -73,12 +74,15 @@
 				</div>
 			</div>
 		</div>
+		<!-- contain the divs end --> 
 
 {{block footer}} <!-- this is default footer -->
+		<div id="headerSpace"></div>
 		<div id="footer">
 			<p>&nbsp;</p>
 			<p align="center">{{=T('Copyright')}} &#169; 2010 This is ray blog adminATwuliang.org</p>
 		</div>
+		<!-- this is default footer end -->
 {{end}} 
 	</div>
 <script src="{{=URL('static','js/highlight.min.js')}}"></script>	

@@ -81,6 +81,7 @@ crud.settings.auth = None        # =auth to enforce authorization on crud
 ## >>> for row in rows: print row.id, row.myfield
 #########################################################################
 import datetime
+from gluon.storage import Storage
 now = datetime.datetime.today()
 
 #db = DAL('sqlite://storage.db')
@@ -156,3 +157,10 @@ db.define_table('ray_setting',
     Field('key', required=True),
     Field('value', required=True),
     Field('description'))
+
+settings = cache.ram('settings',
+    lambda: Storage(dict([(r.key, r.value)
+                 for r in db().select(db.ray_setting.ALL)])),
+    time_expire=3600)
+
+print type(settings)

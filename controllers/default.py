@@ -11,6 +11,7 @@
 import random,string
 import Image, ImageDraw, io
 from gluon.contrib.markdown.markdown2 import markdown
+from gluon.storage import Storage
 
 ##identifyingCode
 def __txt2img(label, imgformat="PNG",
@@ -45,17 +46,6 @@ def __get_latest_comments():
 
 def __get_links():
     return db(db.ray_link.visible == 1).select(orderby=db.ray_link.id)
-
-def __get_settings():
-    ray_properties_values = db(db.ray_setting).select()
-    print len(ray_properties_values)
-    print str(ray_properties_values)
-    settings = dict()
-    for value in ray_properties_values:
-        settings[value.key]=value.value
-        print value.key + ' ' + value.value
-    print settings['blog.use.markdown']
-    return settings
 
 def __calc_pagesize(count):
     totalpage = count / PAGE_SIZE
@@ -159,7 +149,7 @@ def blog():
     #print start,PAGE_SIZE,start*PAGE_SIZE
     blogs = db().select(db.ray_blog.ALL, limitby=(start*PAGE_SIZE, (start + 1)*PAGE_SIZE), orderby=~db.ray_blog.created_date) 
     blogs_totalpages = __calc_pagesize(db(db.ray_blog.id > 0).count())
-    return __append_share_dict(dict(blogs=blogs,blogs_totalpages = blogs_totalpages, blogs_pageid = start + 1, settings=__get_settings()))
+    return __append_share_dict(dict(blogs=blogs,blogs_totalpages = blogs_totalpages, blogs_pageid = start + 1))
 
 @__update_visit_log
 def category():
@@ -297,7 +287,6 @@ def new_blog():
         response.flash = 'blog saved'
     elif blog_form.errors:
         response.flash = 'blog has errors'
-    response.settings = __get_settings()
     return dict(blog_form=blog_form, blog_comments=None)
 
 def edit_blog():
@@ -313,7 +302,6 @@ def edit_blog():
     elif blog_form.errors:
         response.flash = 'blog has error'
     blog_comments = db(db.ray_comment.blog_id == blog.id).select(orderby=~db.ray_comment.created_date)
-    response.settings =__get_settings()
     return response.render('default/new_blog.html', dict(blog_form = blog_form, blog_comments = blog_comments))
 
 def delete_blog():
@@ -411,8 +399,12 @@ def admin_settings():
        response.flash = 'setting saved'
     elif setting_form.errors:
        response.flash = 'setting have error'
-    settings = db(db.ray_setting).select()
-    return dict(settings=settings, setting_form=setting_form) 
+    cache.ram('settings', None)
+    settings = cache.ram('settings',
+    lambda: Storage(dict([(r.key, r.value)
+                 for r in db().select(db.ray_setting.ALL)])),
+    time_expire=3600)
+    return dict(ray_settings=db(db.ray_setting).select(), setting_form=setting_form) 
 
 def delete_link():
     if not check_login():

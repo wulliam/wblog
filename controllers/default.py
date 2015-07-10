@@ -86,6 +86,8 @@ def __update_visit_log(func):
 
 def __update_blog_count(func):
     def myfunction(*args, **kv):
+        if settings.get('enable.visit.log') != str(1):
+            return func(*args, **kv)
         visit = False
         if request.args(0) is not None:
             blog_id = request.args(0)
@@ -301,6 +303,7 @@ def edit_blog():
         blog_form = SQLFORM(db.ray_blog)
     if blog_form.accepts(request.vars, formname='blog_form'):
         response.flash='blog saved'
+        return redirect(URL("admin_blog", args=["category_" + request.vars.get("category_id")]))
     elif blog_form.errors:
         response.flash = 'blog has error'
     blog_comments = db(db.ray_comment.blog_id == blog.id).select(orderby=~db.ray_comment.created_date)

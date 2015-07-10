@@ -158,9 +158,9 @@ db.define_table('ray_setting',
     Field('value', required=True),
     Field('description'))
 
-settings = cache.ram('settings',
-    lambda: Storage(dict([(r.key, r.value)
-                 for r in db().select(db.ray_setting.ALL)])),
-    time_expire=3600)
-
-print type(settings)
+if 'settings' not in globals():
+    settings = cache.ram('settings',
+        lambda: Storage(dict([(r.key, r.value)
+                     for r in db().select(db.ray_setting.ALL)])),
+        time_expire=3600)
+    #print type(settings)

@@ -69,6 +69,8 @@ def __validate_extra_identify_code(form):
     
 def __update_visit_log(func):
     def myfunction(*args, **kv):
+        if settings.get('enable.visit.log') != str(1):
+            return func(*args, **kv)
         try:
             if 'visit' not in request.cookies:
                 db.ray_visit.insert(remote_addr=request.env.remote_addr, user_agent=request.env.http_user_agent, created_date=now)

@@ -20,7 +20,23 @@ tinyMCE.init({
 """
 }}
 {{end custome_header}}
+
 {{=blog_form}}
+
+<div class="attachemnt">
+<span class="attachemnt_header">附件</span> 已上传的文件： 
+{{if globals().get('blog_attachments') is not None:}}
+  {{for attachment in blog_attachments:}}
+    {{include 'default/show_attachment.html'}}
+  {{pass}}
+{{pass}}
+
+ 上传新的文件：
+ <div id="attachment_iframes" >
+<iframe src="{{=URL('new_attachment', args=[request.args(0)])}}" style="border:0px;height:30px;width:100%;" frameborder="0" border="0" cellspacing="0" allowTransparency="true" scrolling="no" resizable="no"></iframe>
+</div>
+
+</div>
 
 <div id="target"></div>
 
@@ -28,6 +44,8 @@ tinyMCE.init({
   <input type="hidden" name="preview_text" id="preview_text" />
   <input type="submit" name="Preview" />
 </form>
+
+
 
 <p>
 {{if blog_comments is not None:}}
@@ -48,4 +66,36 @@ jQuery('#myform').submit(function() {
        ['preview_text'], 'target');
   return false;
 });
+
+jQuery.fn.extend({
+insertAtCaret: function(myValue){
+  return this.each(function(i) {
+    if (document.selection) {
+      //For browsers like Internet Explorer
+      this.focus();
+      sel = document.selection.createRange();
+      sel.text = myValue;
+      this.focus();
+    }
+    else if (this.selectionStart || this.selectionStart == '0') {
+      //For browsers like Firefox and Webkit based
+      var startPos = this.selectionStart;
+      var endPos = this.selectionEnd;
+      var scrollTop = this.scrollTop;
+      this.value = this.value.substring(0, startPos)+myValue+this.value.substring(endPos,this.value.length);
+      this.focus();
+      this.selectionStart = startPos + myValue.length;
+      this.selectionEnd = startPos + myValue.length;
+      this.scrollTop = scrollTop;
+    } else {
+      this.value += myValue;
+      this.focus();
+    }
+  })
+}
+});
+
+function addAttachment(fileName, fileUrl) {
+  $('#ray_blog_text').insertAtCaret('\n![' + fileName + '](' + fileUrl + ')\n\n');return false;
+}
 </script>

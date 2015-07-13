@@ -3,7 +3,7 @@
         <div class="blogTime">{{=IMG(_src=URL('static', 'images/date_icon_blue.gif'),_alt="",_height="10",_width="10")}}{{=blog.created_date}} {{=blog.title}}</div> 
         <div class="blogTitle"></div>
         <div class="blogContent">
-            {{if blog.isMarkdown:}}
+            {{if blog.is_markdown:}}
                {{from gluon.contrib.markdown.markdown2 import markdown}}
                {{=XML(markdown(blog.text), sanitize=False)}}
             {{else:}}

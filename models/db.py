@@ -15,7 +15,7 @@ if request.env.web2py_runtime_gae:            # if running on Google App Engine
     # session.connect(request, response, db = MEMDB(Client()))
 else:                                         # else use a normal relational database
     #db = DAL('sqlite://storage.sqlite')       # if not, use SQLite or other DB ,fake_migrate=True
-    db = DAL('mysql://root:@localhost/wblog',migrate_enabled=True,entity_quoting=True)
+    db = DAL('mysql://root:@localhost/wblog',migrate_enabled=True,entity_quoting=True,db_codec='UTF-8')
 
 # by default give a view/generic.extension to all actions from localhost
 # none otherwise. a pattern can be 'controller/function.extension'
@@ -32,6 +32,8 @@ response.generic_patterns = ['*'] if request.is_local else []
 #########################################################################
 
 from gluon.tools import Mail, Auth, Crud, Service, PluginManager, prettydate
+import os
+from datetime import date
 mail = Mail()                                  # mailer
 auth = Auth(db)                                # authentication/authorization
 crud = Crud(db)                                # for CRUD helpers using auth
@@ -86,14 +88,14 @@ now = datetime.datetime.today()
 
 #db = DAL('sqlite://storage.db')
 
-db.define_table('ray_about', 
+db.define_table('ray_about',
     Field('title'),
     Field('name'),
     Field('value'),
     Field('description'),
     Field('type'))
-    
-db.define_table('ray_admin', 
+
+db.define_table('ray_admin',
     Field('admin_name', required=True),
     Field('admin_pass', required=True))
 
@@ -101,17 +103,17 @@ db.define_table('ray_category',
     Field('name', required=True),
     Field('corder', 'integer', required=True),
     Field('is_public', default=1, required=True))
-        
+
 db.define_table('ray_blog',
     Field('title', required=True),
     Field('text', 'text', required=True),
     Field('category_id', db.ray_category,  required=True),
     Field('created_date', 'datetime', required=True, default=now, writable=False),
     Field('count', 'integer',writable=False,readable=False),
-    Field('isMarkdown', default=False, required=True))
+    Field('is_markdown', default=False, required=True))
 
 db.ray_blog.category_id.requires=IS_IN_DB(db, 'ray_category.id', '%(name)s')
-    
+
 db.define_table('ray_comment',
     Field('title', required=True),
     Field('text', required=True),
@@ -130,7 +132,7 @@ db.define_table('ray_count',
 
 db.define_table('ray_visit',
     Field('remote_addr'),
-    Field('user_agent'),    
+    Field('user_agent'),
     Field('created_date', 'datetime', required=True, default=now))
 
 db.define_table('ray_visitlog',
@@ -138,7 +140,6 @@ db.define_table('ray_visitlog',
     Field('visit_url'),
     Field('created_date', 'datetime', required=True, default=now))
 
-    
 db.define_table('ray_guestbook',
     Field('name', required=True),
     Field('email', required=True, requires = IS_EMAIL(error_message=T('invalid email!'))),
@@ -146,7 +147,7 @@ db.define_table('ray_guestbook',
     Field('created_date', 'datetime', required=True, default=now),
     Field('reply'),
     Field('site'))
-    
+
 db.define_table('ray_link',
     Field('name', required=True),
     Field('url', required=True),
@@ -157,6 +158,13 @@ db.define_table('ray_setting',
     Field('key', required=True),
     Field('value', required=True),
     Field('description'))
+
+db.define_table('ray_attachment',
+    Field('title'),
+    Field('blog_id', db.ray_blog),
+    #Field('file', 'upload',autodelete=True,uploadseparate=True),
+    Field('file', 'upload',autodelete=True,uploadfolder=os.path.join(request.folder, 'uploads', date.today().strftime("%Y_%m_%d"))),
+    Field('created_date', 'datetime', required=True, default=now,writable=False,readable=False),format = '%(title)s')
 
 if 'settings' not in globals():
     settings = cache.ram('settings',

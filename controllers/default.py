@@ -306,8 +306,9 @@ def edit_blog():
         return redirect(URL("admin_blog", args=["category_" + request.vars.get("category_id")]))
     elif blog_form.errors:
         response.flash = 'blog has error'
+    blog_attachments = db(db.ray_attachment.blog_id==blog.id).select(orderby=~db.ray_attachment.created_date)
     blog_comments = db(db.ray_comment.blog_id == blog.id).select(orderby=~db.ray_comment.created_date)
-    return response.render('default/new_blog.html', dict(blog_form = blog_form, blog_comments = blog_comments))
+    return response.render('default/new_blog.html', dict(blog_form = blog_form, blog_comments = blog_comments, blog_attachments = blog_attachments))
 
 def delete_blog():
     if not check_login():
@@ -465,6 +466,47 @@ def delete_comment():
         response.flash = 'comment deleted'
     redirect(URL('edit_blog', args=[str(blog_id)]))
 
+def show_attachment():
+    if not check_login():
+        return redirect(URL('login'))   
+    if request.args(0) is not None: 
+        attachment = db(db.ray_attachment.id == request.args(0)).select().first()
+    return dict(attachment = attachment)
+
+def new_attachment():
+    if not check_login():
+        return redirect(URL('login'))
+    my_extra_element1 =  SPAN('上传中 ', IMG(_src=URL('static','images/spinner.gif'), _alter="test"), _class='test', _style="display:none;", _id='upload-tip')    
+    my_extra_element2 =  SPAN('', _class='test', _style="display:none;", _id="upload-tip")
+    attachment_form = SQLFORM(db.ray_attachment, fields=['file'] )
+    attachment_form[0].insert(-1,my_extra_element1)
+    attachment_form[0].insert(-1,my_extra_element2)
+    attachment_form.element('input', _type = 'submit')['_style'] = 'display:none'
+    if request.vars.file!=None:
+        attachment_form.vars.title = request.vars.file.filename
+    if attachment_form.vars.title is None:
+        attachment_form.vars.title = "default"
+    if request.args(0) is not None:
+        attachment_form.vars.blog_id = request.args(0)
+    #if attachment_form.process().accepted:
+    if attachment_form.accepts(request.vars, formname='attachment_form'):
+        attachment = db(db.ray_attachment.id == attachment_form.vars.id).select()
+        redirect(URL("show_attachment", args=[attachment_form.vars.id]))
+    else:
+        return dict(attachment_form=attachment_form)
+
+def delete_attachment():
+    if not check_login():
+        return redirect(URL('login'))
+    attachment_id = None
+    if request.args(0) is not None:
+        db(db.ray_attachment.id == request.args(0)).delete()
+        return dict(status="0K")
+    else:
+        return dict(error="no id")
+
+
+
 def index():
     """
     example action using the internationalization operator T and flash
@@ -489,12 +531,13 @@ def user():
     """
     return dict(form=auth())
 
-
+@cache.action()
 def download():
     """
     allows downloading of uploaded files
     http://..../[app]/default/download/[filename]
     """
+    print 'download' + str(request.args(0))
     return response.download(request,db)
 
 

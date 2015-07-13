@@ -1,0 +1,63 @@
+<html>
+<head>
+<title></title>
+<script language="javascript" type="text/javascript"
+	src="{{=URL('static','js/jquery.js')}}"></script>
+<link rel="stylesheet" type="text/css" href="{{=URL('static','css/base.css')}}">
+<link rel="stylesheet" type="text/css" href="{{=URL('static','css/default.css')}}">
+</head>
+<body style="text-align:left">
+{{if attachment is not None:}}
+<div class="attachment_{{=attachment.id}}">{{=attachment.title}}&nbsp;<a onclick="addAttachment('{{=attachment.title}}','{{=URL('download', args=[attachment.file])}}')"href="javascript:void(0);"><IMG SRC="{{=URL('static','images/btn_sticky.png')}}" alter="将图片插入编辑器" title="将图片插入编辑器"></a>&nbsp;<a onclick="delete_file(this)" class="delete_img" data-id = "{{=attachment.id}}" href="javascript:void(0);"><IMG SRC="{{=URL('static','images/btn_delete.png')}}" alter="删除附件" title="删除附件"></a></div>
+
+<script type="text/javascript">
+
+function delete_file(element) {
+    	//{{=URL('default', 'delete_attachment')}}
+		$.get( "{{=URL('default', 'delete_attachment')}}" + '/' +$(element).attr('data-id'), function( data ) {
+			var isInIframe = (window.location != window.parent.location) ? true : false;
+			if (isInIframe) {
+				$(element).closest('HTML').remove();
+			} else {
+				$(element).parent().remove();
+			}
+		});
+		
+	}
+
+jQuery.fn.extend({
+insertAtCaret: function(myValue){
+  return this.each(function(i) {
+    if (document.selection) {
+      //For browsers like Internet Explorer
+      this.focus();
+      sel = document.selection.createRange();
+      sel.text = myValue;
+      this.focus();
+    }
+    else if (this.selectionStart || this.selectionStart == '0') {
+      //For browsers like Firefox and Webkit based
+      var startPos = this.selectionStart;
+      var endPos = this.selectionEnd;
+      var scrollTop = this.scrollTop;
+      this.value = this.value.substring(0, startPos)+myValue+this.value.substring(endPos,this.value.length);
+      this.focus();
+      this.selectionStart = startPos + myValue.length;
+      this.selectionEnd = startPos + myValue.length;
+      this.scrollTop = scrollTop;
+    } else {
+      this.value += myValue;
+      this.focus();
+    }
+  })
+}
+});
+
+function addAttachment(fileName, fileUrl) {
+  $('#ray_blog_text').insertAtCaret('\n![' + fileName + '](' + fileUrl + ')\n\n');return false;
+}
+
+</script>
+{{pass}}
+</body>
+</html>

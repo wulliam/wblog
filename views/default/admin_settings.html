@@ -1,0 +1,20 @@
+{{extend 'admin_layout.html'}}
+{{if ray_settings is not None:}}
+<table>
+<tr><td>key</td><td>value</td><td>des</td><td>管理操作</td></tr>
+{{for setting in ray_settings:}}
+<tr>
+<td>{{=setting.key}}</td><td>{{=setting.value}}</td><td>{{=setting.description}}</td><td>{{=A('编辑',_href=URL('admin_settings', args=[str(setting.id)]))}}&nbsp;{{=A('删除',_href=URL('delete_setting', args=[str(setting.id)]))}}</td>
+</tr>
+{{pass}}
+</table>
+
+</p>
+
+{{pass}}
+
+<br/>
+<p>
+<b>添加新</b>
+{{=setting_form}}
+</p>

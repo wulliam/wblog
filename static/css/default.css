@@ -285,4 +285,11 @@ ul {
 .pageInfo-naviRight {
     float: right;
 }
+.text img {
+    max-width: 600px;
+}
+
+img {
+    max-width: 500px;
+}
 -->

@@ -49,3 +49,9 @@
     color: #999999;
     padding: 2px;
 }
+.txt img {
+    max-width: 600px;
+}
+img {
+    max-width: 600px;
+}

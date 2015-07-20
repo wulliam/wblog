@@ -22,7 +22,7 @@ function delete_file(element) {
 				$(element).parent().remove();
 			}
 		});
-		
+
 	}
 
 jQuery.fn.extend({
@@ -54,7 +54,7 @@ insertAtCaret: function(myValue){
 });
 
 function addAttachment(fileName, fileUrl) {
-  $('#ray_blog_text').insertAtCaret('\n![' + fileName + '](' + fileUrl + ')\n\n');return false;
+  window.parent.$('#ray_blog_text').insertAtCaret('\n![' + fileName + '](' + fileUrl + ')\n\n');return false;
 }
 
 </script>

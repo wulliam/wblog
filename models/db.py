@@ -87,14 +87,6 @@ from gluon.storage import Storage
 now = datetime.datetime.today()
 
 #db = DAL('sqlite://storage.db')
-
-db.define_table('ray_about',
-    Field('title'),
-    Field('name'),
-    Field('value'),
-    Field('description'),
-    Field('type'))
-
 db.define_table('ray_admin',
     Field('admin_name', required=True),
     Field('admin_pass', required=True))
@@ -109,7 +101,8 @@ db.define_table('ray_blog',
     Field('text', 'text', required=True),
     Field('category_id', db.ray_category,  required=True),
     Field('created_date', 'datetime', required=True, default=now, writable=False),
-    Field('count', 'integer',writable=False,readable=False),
+    Field('updated_date', 'datetime', required=True, default=now, writable=False),
+    Field('count', 'integer',writable=False,readable=False,default=0),
     Field('is_markdown', default=False, required=True))
 
 db.ray_blog.category_id.requires=IS_IN_DB(db, 'ray_category.id', '%(name)s')
@@ -161,14 +154,15 @@ db.define_table('ray_setting',
 
 db.define_table('ray_attachment',
     Field('title'),
-    Field('blog_id', db.ray_blog),
+    Field('blog_id', db.ray_blog, required=False, default=None),
     #Field('file', 'upload',autodelete=True,uploadseparate=True),
     Field('file', 'upload',autodelete=True,uploadfolder=os.path.join(request.folder, 'uploads', date.today().strftime("%Y_%m_%d"))),
     Field('created_date', 'datetime', required=True, default=now,writable=False,readable=False),format = '%(title)s')
 
-if 'settings' not in globals():
-    settings = cache.ram('settings',
-        lambda: Storage(dict([(r.key, r.value)
-                     for r in db().select(db.ray_setting.ALL)])),
-        time_expire=3600)
-    #print type(settings)
+# if 'settings' not in cache.ram.storage:
+#     settings = cache.ram('settings',
+#         lambda: Storage(dict([(r.key, r.value)
+#                      for r in db().select(db.ray_setting.ALL)])),
+#         time_expire=3600)
+#     #print type(settings)
+#     #print 'xxx'

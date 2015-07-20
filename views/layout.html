@@ -4,7 +4,7 @@
 <META content="text/html; charset=UTF-8" http-equiv="Content-Type" />
 <META HTTP-EQUIV="Cache-Control" CONTENT="max-age=0">
 <META HTTP-EQUIV="Pragma" CONTENT="no-cache">
-{{ if  settings.get('blog.use.markdown') != str(1):}}
+{{ if session.settings.get('blog.use.markdown') != str(1):}}
 <script language="javascript" type="text/javascript"
 	src="{{=URL('static','js/tiny_mce/tiny_mce.js')}}"></script>
 <script type="text/javascript">
@@ -34,7 +34,7 @@
 <script src="{{=URL('static','js/highlight.min.js')}}"></script>
 <!-- All JavaScript at the bottom, except for Modernizr which enables HTML5 elements & feature detects -->
     <script src="{{=URL('static','js/modernizr-1.7.min.js')}}"></script>
-    
+
     {{#------  require CSS and JS files for this page (read info in base.css) ------}}
     {{response.files.append(URL('static','css/base.css'))}}
     {{response.files.append(URL('static','css/superfish.css'))}}
@@ -46,10 +46,10 @@
 
 </head>
 <body>
-    
+
 	<div id="main">
 	<div class="flash">{{=response.flash or ''}}</div> <!-- notification div -->
-	{{block header}} <!-- this is default header -->  
+	{{block header}} <!-- this is default header -->
 		<div id="header">
 			<div id="blogTitle">wulliam's note</div>
 			<div id="blogDescription">
@@ -59,9 +59,9 @@
 	{{end}}
 	{{block statusbar}} <!-- this is default statusbar -->
 		<div id="headerSpace"></div>
-		<div style="clear: both;"></div><!-- Clear the divs --> 
+		<div style="clear: both;"></div><!-- Clear the divs -->
 	{{end}}
-	<!-- contain the divs --> 
+	<!-- contain the divs -->
 		<div id="contain">
 			<div id="mainbg">
 				<div id="right">
@@ -74,7 +74,7 @@
 				</div>
 			</div>
 		</div>
-		<!-- contain the divs end --> 
+		<!-- contain the divs end -->
 
 {{block footer}} <!-- this is default footer -->
 		<div id="headerSpace"></div>
@@ -83,16 +83,16 @@
 			<p align="center">{{=T('Copyright')}} &#169; 2010 This is <a href="https://github.com/wulliam/wblog">wblog</a> by wuliang</p>
 		</div>
 		<!-- this is default footer end -->
-{{end}} 
+{{end}}
 	</div>
-<script src="{{=URL('static','js/highlight.min.js')}}"></script>	
+<script src="{{=URL('static','js/highlight.min.js')}}"></script>
 <script type="text/javascript">
 /**
 $(function(){
-	
+
 	hljs.initHighlighting.called = false;
     // hightlight code
-    hljs.initHighlightingOnLoad(); 
+    hljs.initHighlightingOnLoad();
 }
 **/
 $(document).ready(function() {

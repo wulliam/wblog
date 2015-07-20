@@ -1,15 +1,15 @@
 {{if blog.category_id.is_public ==1 or session.login:}}
 <div class="blogContainer">
-        <div class="blogTime">{{=IMG(_src=URL('static', 'images/date_icon_blue.gif'),_alt="",_height="10",_width="10")}}{{=blog.created_date}} {{=blog.title}}</div> 
+    <div class="blogTime">{{=IMG(_src=URL('static', 'images/date_icon_blue.gif'),_alt="",_height="10",_width="10")}}{{=blog.created_date}} {{=blog.title}}</div>
         <div class="blogTitle"></div>
         <div class="blogContent">
             {{if blog.is_markdown:}}
-               {{from gluon.contrib.markdown.markdown2 import markdown}}
-               {{=XML(markdown(blog.text), sanitize=False)}}
+                {{from gluon.contrib.markdown.markdown2 import markdown}}
+                {{=XML(markdown(blog.text), sanitize=False)}}
             {{else:}}
-              {{=XML(blog.text, sanitize=False)}}
+                {{=XML(blog.text, sanitize=False)}}
             {{pass}}
-        </div>    
+        </div>
         <div class="blogInfo">由wulliam发表于{{=prettydate(blog.created_date,T)}}｜{{=A(blog.category_id.name, _href=URL('category', args=['category_' + str(blog.category_id.id)]))}}|{{=A('查看',_href=URL('view',args=[blog.id]))}} {{=blog.count}}次|{{=A('评论',_href=URL('view',args=[blog.id])+'#blogComment')}}{{=blog.ray_comment.count()}}篇</div>
         <hr noshade>
 </div>

@@ -5,11 +5,11 @@
 """
 <script type="text/javascript">
 tinyMCE.init({
-    language : 'zh',  
+    language : 'zh',
     mode : "textareas",
     theme : "advanced",
     add_unload_trigger : false,
-    plugins : 'safari',     
+    plugins : 'safari',
     theme_advanced_toolbar_location : "top",
     theme_advanced_toolbar_align : "left",
     theme_advanced_statusbar_location : "bottom",
@@ -24,7 +24,7 @@ tinyMCE.init({
 {{=blog_form}}
 
 <div class="attachemnt">
-<span class="attachemnt_header">附件</span> 已上传的文件： 
+<span class="attachemnt_header">附件</span> 已上传的文件：
 {{if globals().get('blog_attachments') is not None:}}
   {{for attachment in blog_attachments:}}
     {{include 'default/show_attachment.html'}}
@@ -33,7 +33,15 @@ tinyMCE.init({
 
  上传新的文件：
  <div id="attachment_iframes" >
-<iframe src="{{=URL('new_attachment', args=[request.args(0)])}}" style="border:0px;height:30px;width:100%;" frameborder="0" border="0" cellspacing="0" allowTransparency="true" scrolling="no" resizable="no"></iframe>
+
+<iframe
+{{if request.args(0) is not None:}}
+src="{{=URL('new_attachment', args=[request.args(0)])}}"
+{{else:}}
+src="{{=URL('new_attachment')}}"
+{{pass}}
+ style="border:0px;height:30px;width:100%;" frameborder="0" border="0" cellspacing="0" allowTransparency="true" scrolling="no" resizable="no"></iframe>
+
 </div>
 
 </div>
@@ -51,7 +59,7 @@ tinyMCE.init({
 {{if blog_comments is not None:}}
 {{for blog_comment in blog_comments:}}
 <div class="blogComment">
-       <strong>{{=blog_comment.title}}</strong>{{=blog_comment.created_date}} | {{=blog_comment.name}} | {{=A('删除',_href=URL('delete_comment', args=[str(blog_comment.id)]))}}<br> 
+       <strong>{{=blog_comment.title}}</strong>{{=blog_comment.created_date}} | {{=blog_comment.name}} | {{=A('删除',_href=URL('delete_comment', args=[str(blog_comment.id)]))}}<br>
        <div class="commentContent">
        {{=blog_comment.text}}
        </div>

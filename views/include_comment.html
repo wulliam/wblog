@@ -1,15 +1,17 @@
 {{if blog_comments is not None:}}
 {{for blog_comment in blog_comments:}}
 <div class="blogComment">
-       <strong>{{=blog_comment.title}}</strong>{{=blog_comment.created_date}} | {{=blog_comment.name}}<br>
+       <strong>{{=blog_comment.title}}</strong>&nbsp;{{=blog_comment.created_date}} | {{=blog_comment.name}} {{if session.login:}} | &nbsp;{{=A(T('Delete'),_href=URL('delete_comment', args=[str(blog_comment.id)]))}} {{pass}} <br>
        <div class="commentContent">
        {{=blog_comment.text}}
        </div>
 </div>
 {{pass}}
 {{pass}}
+{{if not session.login:}}
 <div class="blogCommentForm">
 ->发表一篇关于这个主题的新的评论<br>
 <a name="blogComment"></a>
 {{=comment_form}}
 </div>
+{{pass}}

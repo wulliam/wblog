@@ -1,4 +1,4 @@
-{{if globals().get('categories') is not None:}}
+{{if globals().get('total_number_of_blogs') is not None:}}
 <div id="information">
 	<br>
 	{{=IMG(_src=URL("static", "images/sidebar_icon.gif"), _height="32", _width="22")}}
@@ -9,6 +9,7 @@
 	访问次数:{{=total_number_of_visit}}<br>
 	<br>
 </div>
+{{pass}}
 <div id="nav">
 	<br>
 	{{=IMG(_src=URL("static", "images/sidebar_icon.gif"), _height="32", _width="22")}}
@@ -17,8 +18,15 @@
 	{{=A('首页', _href=URL("blog"))}}<br>
 	<!-- {{=A('关于我', _href=URL("aboutme"))}}<br> -->
 	{{=A('留言', _href=URL("guestbook"))}}<br>
+	{{if not session.login:}}
 	{{=A('管理', _href=URL("login"))}}<br>
+	{{pass}}
+	{{if session.login:}}
+	{{=A('分类管理',_href=URL('admin_category'))}}<br>
+	{{=A('退出登录',_href=URL('logout'))}}<br>
+	{{pass}}
 </div>
+{{if globals().get('categories') is not None:}}
 <div id="blogCategory">
 	<br>
 	{{=IMG(_src=URL("static", "images/sidebar_icon.gif"), _height="32", _width="22")}}

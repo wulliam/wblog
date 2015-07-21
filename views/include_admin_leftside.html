@@ -5,6 +5,8 @@
 </div>
 <strong>博客管理</strong><br>
 <div>
+<br>
+{{=A('首页', _href=URL("blog"))}}<br>
 {{=A('发表博客',_href=URL('new_blog'))}}<br>
 {{=A('分类管理',_href=URL('admin_category'))}}<br>
 {{=A('编辑文章和评论',_href=URL('admin_blog'))}}<br>
@@ -12,4 +14,5 @@
 {{=A('链接管理',_href=URL('admin_links'))}}<br>
 {{=A('配置管理',_href=URL('admin_settings'))}}<br>
 {{=A('退出登录',_href=URL('logout'))}}<br>
+
 </div>

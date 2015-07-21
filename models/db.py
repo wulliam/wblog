@@ -84,7 +84,22 @@ crud.settings.auth = None        # =auth to enforce authorization on crud
 #########################################################################
 import datetime
 from gluon.storage import Storage
+from gluon.contrib.markdown.markdown2 import markdown
 now = datetime.datetime.today()
+
+PREVIEW_SIZE = 300
+
+def preview_html(txt):
+    result = txt
+    if len(txt) > PREVIEW_SIZE:
+        index = txt.find('</p>', PREVIEW_SIZE, -1)
+        if len(txt) > index:
+            #print "len {0} {1}".format(len(txt), index)
+            result =  txt[0:index] + "...</p>"
+    #print "result {0}".format((result).encode('utf-8'))
+    return result
+
+
 
 #db = DAL('sqlite://storage.db')
 db.define_table('ray_admin',
@@ -103,7 +118,10 @@ db.define_table('ray_blog',
     Field('created_date', 'datetime', required=True, default=now, writable=False),
     Field('updated_date', 'datetime', required=True, default=now, writable=False),
     Field('count', 'integer',writable=False,readable=False,default=0),
-    Field('is_markdown', default=False, required=True))
+    Field('is_markdown', default=False, required=True),
+    Field.Virtual('text_view', lambda row: row.ray_blog.text if row.ray_blog.is_markdown!='1' else markdown(row.ray_blog.text)),
+    #Field.Virtual('preview', lambda row: preview_html(row.ray_blog.text_view))
+    )
 
 db.ray_blog.category_id.requires=IS_IN_DB(db, 'ray_category.id', '%(name)s')
 

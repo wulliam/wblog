@@ -51,21 +51,13 @@ src="{{=URL('new_attachment')}}"
 <form id="myform">
   <input type="hidden" name="preview_text" id="preview_text" />
   <input type="submit" name="Preview" />
+  <input type="button" name="xxxx" />
 </form>
 
 
 
 <p>
-{{if blog_comments is not None:}}
-{{for blog_comment in blog_comments:}}
-<div class="blogComment">
-       <strong>{{=blog_comment.title}}</strong>{{=blog_comment.created_date}} | {{=blog_comment.name}} | {{=A('删除',_href=URL('delete_comment', args=[str(blog_comment.id)]))}}<br>
-       <div class="commentContent">
-       {{=blog_comment.text}}
-       </div>
-</div>
-{{pass}}
-{{pass}}
+{{include 'include_comment.html'}}
 </p>
 <script>
 jQuery('#myform').submit(function() {

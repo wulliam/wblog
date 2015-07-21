@@ -3,7 +3,7 @@
 {{if guestbooks is not None:}}
     {{include 'include_functions.html'}}
     {{for guestbook in guestbooks:}}
-        <div class='blogtitle'>由{{=guestbook.name}}发表于{{=guestbook.created_date}}</div>
+        <div class='blogtitle'>由{{=guestbook.name}}发表于{{=guestbook.created_date}} {{if session.login:}} &nbsp;{{=A(T('Reply'),_href=URL('admin_guestbook', args=[str(guestbook.id)]))}} | &nbsp;{{=A(T('Delete'),_href=URL('delete_guestbook', args=[str(guestbook.id)]))}} {{pass}} </div>
 	<div clas='guestbook_email_text'>{{=guestbook.text}}</div>
 	<div cass='guestbook_email'>{{=guestbook.name}}的电子邮箱地址:{{=guestbook.email}}</div>
 	<div class='guestbook_site'>{{=guestbook.name}}的个人网站:{{=guestbook.site}}</div>

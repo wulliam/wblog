@@ -15,7 +15,10 @@ if request.env.web2py_runtime_gae:            # if running on Google App Engine
     # session.connect(request, response, db = MEMDB(Client()))
 else:                                         # else use a normal relational database
     #db = DAL('sqlite://storage.sqlite')       # if not, use SQLite or other DB ,fake_migrate=True
-    db = DAL('mysql://root:@localhost/wblog',migrate_enabled=True,entity_quoting=True,db_codec='UTF-8')
+    if 'DAL_URL' in globals():
+        db = DAL(DAL_URL,migrate_enabled=True,entity_quoting=True,db_codec='UTF-8')
+    else:
+        db = DAL('sqlite://storage.sqlite',migrate_enabled=True,entity_quoting=True,db_codec='UTF-8')
 
 # by default give a view/generic.extension to all actions from localhost
 # none otherwise. a pattern can be 'controller/function.extension'
